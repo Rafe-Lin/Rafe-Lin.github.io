@@ -36,6 +36,15 @@ nav {
     align-items: center; /* 垂直置中 */
 }
 
+.nav-left a {
+    color: black;
+    text-decoration: none;
+}
+
+.nav-left a:hover {
+    cursor: pointer; /* 滑鼠靠近時變成指針樣式 */
+}
+
 .nav-left {
     cursor: pointer; /* 滑鼠滑過時游標變成可點擊狀態 */
 }
