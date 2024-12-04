@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1P!ng's Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- 插入 favicon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 0 24 24" width="28" fill="#000000">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <a class="blog-title" style="font-size: 24px;">1P!ng's Blog</a>
+        </div>
+        <div class="nav-center">
+            <a href="/">echo $(whoami)</a>
+            <a class="separator">|</a>
+            <a href="/?page=articles">ls Articles</a>
+            <a class="separator">|</a>
+            <a href="/?page=CV">tail Experience.log</a>
+        </div>
+        <div class="nav-right">
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 24 24" width="18" fill="black">
+                    <path d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"/>
+                </svg>
+                <input type="text" placeholder="Search">
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="box about-me">
+            <img src="src/profile-avatar.webp" width="250px" style="border-radius: 20px;"/>
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: bold;">1P!ng</p>
+            <p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px;">T-school Student</p>
+            <hr>
+            <div class="icon-text">
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+                <div class="icon-plantext">
+                    <a style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #888888; margin-bottom: 2px;">Email</a>
+                    <a style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: black;">sunyipingtw@icloud.com</a>
+                </div>
+            </div>
+            <div class="icon-text">
+                <div class="icon-container github-icon-container" onclick="location.href='https://github.com/1PingSun';">
+                    <svg aria-hidden="true" height="24" version="1.1" viewBox="0 0 16 16" width="24">
+                        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                    </svg>
+                </div>
+                <div class="icon-plantext">
+                    <a style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #888888; margin-bottom: 2px;">GitHub</a>
+                    <a href='https://github.com/1PingSun' style="font-size: 14px; font-family: Arial, Helvetica, sans-serif; color: black; text-decoration: none;">1PingSun</a>
+                </div>
+            </div>
+        </div>
+        <div class="page-main">
+            <div class="box blog-content" id="blog-content">
+                <div id="html-output"></div>
+                <script src="script.js"></script>
+            </div>
+            <div class="box blog-content articles-list" id="articles-list" style="display: none;">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p style="margin: 0px;">© 2024 1P!ng. All rights reserved.</p>
+    </footer>
+    <script src="main.js"></script>
+</body>
+</html>

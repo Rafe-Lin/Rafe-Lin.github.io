@@ -1,0 +1,437 @@
+@font-face {
+    font-family: 'Meslo LG L DZ for Powerline';
+    src: url('fonts/MesloLGLDZ-Regular.ttf') format('truetype'); /* 根據你的字體文件格式調整 */
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* 確保頁面高度至少為視窗高度 */
+}
+
+nav {
+    background-color: #d9d9d9;
+    color: black;
+    padding: 25px;
+    height: 100px;
+    width: 1200px;
+    box-sizing: border-box;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 垂直置中 */
+    position: relative; /* 為了讓子元素使用絕對定位 */
+}
+
+.blog-title {
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: bold;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center; /* 垂直置中 */
+}
+
+.nav-left {
+    cursor: pointer; /* 滑鼠滑過時游標變成可點擊狀態 */
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    width: 150px;
+    height: 50px;
+    overflow: hidden; /* 確保內容不會超出容器 */
+    transition: width 0.3s ease, background-color 0.3s ease; /* 寬度和背景顏色變化過渡效果 */
+}
+
+.search-box:focus-within {
+    width: 200px; /* 當 input 獲得焦點時的寬度 */
+}
+
+.search-box svg {
+    margin: 11px;
+    fill: black; /* 設置圖標顏色為黑色 */
+    flex-shrink: 0; /* 防止 svg 圖標縮小 */
+}
+
+.search-box input {
+    border: none;
+    background: none;
+    outline: none;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    color: #6c6c6c;
+    flex-grow: 1; /* 讓 input 元素填滿剩餘空間 */
+    min-width: 0; /* 防止 input 元素超出容器 */
+    margin-right: 11px;
+    color: black; /* 輸入文字顏色為黑色 */
+}
+
+.search-box input::placeholder {
+    color: #6c6c6c; /* 提示文字顏色為灰色 */
+    font-weight: bold; /* 提示文字為粗體 */
+}
+
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 0.5em;
+}
+
+.nav-center a {
+    font-family: 'Meslo LG L DZ for Powerline', monospace;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    cursor: pointer; /* 滑鼠滑過時游標變成可點擊狀態 */
+}
+
+.nav-center a:hover {
+    color: gray; /* 滑鼠滑過時變淺 */
+}
+
+.nav-center a.separator {
+    color: black; /* 保持分隔符號的顏色 */
+    cursor: default; /* 滑鼠滑過時不變成手形 */
+    transition: none; /* 移除過渡效果 */
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    margin-top: 25px;
+    max-width: 1200px;
+}
+
+.container p {
+    padding-top: 10px;
+    margin: 0px;
+}
+
+.container hr {
+    border: none;
+    border-top: 1px solid #000000; /* 設置上邊框 */
+    margin-top: 10px;
+}
+
+.icon-text {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.icon-plantext {
+    display: flex;
+    flex-direction: column; /* 確保 a 標籤垂直排列 */
+    align-items: flex-start;
+    margin-left: 10px;
+}
+
+.icon-plantext a {
+    display: block;
+}
+
+.icon-container {
+    position: relative;
+    display: inline-block;
+    background-color: white; /* 底部白色方形背景 */
+    padding: 5px; /* 調整內邊距以確保圖標不緊貼邊框 */
+    border-radius: 5px; /* 可選：圓角邊框 */
+}
+
+.icon-container svg {
+    display: block;
+}
+
+.box {
+    text-align: center;
+    padding: 25px;
+    height: 100%;
+}
+
+.about-me {
+    background-color: #d9d9d9;
+    width: 300px;
+    box-sizing: border-box;
+    margin-right: 25px;
+    border-radius: 25px;
+}
+
+.page-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.blog-content {
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #d9d9d9;
+    width: 875px;
+    box-sizing: border-box;
+    border-radius: 25px;
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+	white-space: pre-wrap;
+	word-break: break-all;
+    height: auto;
+}
+
+.blog-content h1 {
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+.blog-content h2,h3,h4,h5,h6 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.blog-content h2 {
+    font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+.blog-content h3 {
+    font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.blog-content p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.blog-content a,a.visited {
+	color: rgb(110, 110, 110);
+	text-decoration: underline;
+}
+
+.blog-content p {
+    padding: 0px;
+    line-height: 1.5;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.blog-content ul, .blog-content ol {
+    padding-left: 20px; /* 設置縮排 */
+    margin: 0; /* 移除默認的外邊距 */
+}
+
+.blog-content li {
+    line-height: 24px;
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+.article-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* 使內容和圖片之間有空間 */
+    background-color: transparent;
+}
+
+.article-image {
+    width: 200px;
+    max-height: 150px; /* 4:3 比例 */
+    object-fit: cover;
+    border-radius: 8px; /* 倒角 */
+    margin-right: 10px;
+    margin-left: 25px !important;
+}
+
+.article-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* 使內容占據剩餘空間 */
+}
+
+.article-date {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    color: #303030;
+    font-size: 80%;
+}
+
+.article-date i {
+    color: #303030; /* 設置日期圖標顏色為淺色 */
+    font-size: 80%;
+}
+
+.article-content p {
+    color: #303030; /* 設置內文顏色為淺色 */
+}
+
+.calendar-icon {
+    margin-right: 2px;
+}
+
+#articles-list {
+    display: flex;
+    flex-direction: column; /* 垂直方向排列 */
+    margin: 0;
+}
+
+#articles-list hr {
+    border: none; /* 移除默認邊框 */
+    border-top: 1px solid #bbb; /* 添加頂部邊框作為分割線 */
+    margin: 25px 0; /* 添加一些外邊距 */
+}
+
+#articles-list h2 {
+    margin: 0;
+    line-height: 2;
+    color: #303030; /* 設置內文顏色為淺色 */
+}
+
+#articles-list h2 a {
+    color: #303030; /* 設置內文顏色為淺色 */
+    text-decoration: none; /* 移除底線 */
+    transition: color 0.3s; /* 添加顏色變化的過渡效果 */
+}
+
+#articles-list h2 a:hover {
+    color: gray; /* 滑鼠靠近時變顏色 */
+    cursor: pointer; /* 滑鼠靠近時變成指針樣式 */
+}
+
+#articles-list p {
+    margin: 0;
+    line-height: 2;
+}
+
+#articles-list a {
+    margin: 0;
+}
+
+.checkbox > li {
+    list-style-type: none;
+    padding: 0;
+    line-height: 1;
+}
+
+.checkbox {
+    padding-left: 0px !important;
+    margin: 0.3em 0 !important; /* 減少核選方塊的外邊距 */
+    margin-right: 0.6em; /* 調整 checkbox 與文字之間的距離 */
+    vertical-align: middle; /* 確保 checkbox 與文字垂直對齊 */
+}
+
+.blog-content img {
+	margin-top: 1.25em;
+	margin-bottom: 1.25em;
+    max-width: 61%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.blog-content pre,code {
+	background: rgba(135, 131, 120, 0.15);
+	padding: 0.2em 0.2em;
+	border-radius: 2.5px;
+	font-size: 100%;
+	tab-size: 2;
+    white-space: pre-wrap; /* 自動換行 */
+    word-wrap: break-word; /* 防止長單詞溢出 */
+}
+
+.github-icon-container:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+.blog-content pre {
+    padding: 16px;
+    overflow-x: auto; /* 添加水平滾動條 */
+}
+
+.blog-content code {
+	color: #eb5757;
+}
+
+.blog-content pre > code{
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+.blog-content pre > p > code {
+	background: none;
+	padding: 0;
+	font-size: 1.25em;
+	color: black;
+}
+
+.blog-content pre > p {
+	margin: 0;
+}
+
+.blog-content blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.blog-content hr {
+    margin: 8px, 0;
+    width: 825px;
+    border-color: rgb(177, 177, 177);
+}
+
+/* 表格樣式 */
+.blog-content table {
+    /* width: 100%; */
+    border-collapse: collapse; /* 確保邊框不重疊 */
+    margin-bottom: 1em;
+}
+
+.blog-content th, .blog-content td {
+    border: 1px solid #a1a1a1; /* 設置表格邊框 */
+    padding: 8px; /* 設置單元格內邊距 */
+    text-align: left; /* 設置文字靠左對齊 */
+}
+
+.blog-content th {
+    background-color: #bbbcbaa8; /* 設置表頭背景顏色 */
+    font-weight: bold; 設置表頭文字加粗
+}
+
+
+footer {
+    background-color: #d9d9d9;
+    width: 1200px;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    position: relative; /* 固定在頁面底部 */
+    margin-top: 25px;
+    bottom: 0;
+    padding: 15px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 14px;
+    display: flex; /* 使用 Flexbox */
+    align-items: center; /* 垂直置中 */
+}
