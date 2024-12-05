@@ -109,6 +109,7 @@ nav {
 
 .nav-center a:hover {
     color: gray; /* 滑鼠滑過時變淺 */
+    text-decoration: none;
 }
 
 .nav-center a.separator {
