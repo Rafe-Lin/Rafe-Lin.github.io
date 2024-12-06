@@ -21,9 +21,10 @@ Check out the live demo of the blog [1ping.me](https://1ping.me/).
 
 1. Edit the Markdown files in the [posts directory](posts/).
 2. Edit the JSON config file in [posts.json](posts.json).
-3. Have fun!
+3. Using [sitemap-generator.py](sitemap-generator.py) to generate sitemap.
+4. Have fun!
 
-## Post Markdown Support Commands
+## Posts Markdown Support Commands
 
 To enhance your blog posts, you can use the following Markdown commands:
 
