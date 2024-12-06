@@ -19,7 +19,9 @@ If you find this project useful, please give it a star on GitHub. Your support i
 2. Edit the JSON config file in [articles.json](articles.json).
 3. Have fun!
 
-## Support Commands
+## Post Markdown Support Commands
+
+To enhance your blog posts, you can use the following Markdown commands:
 
 - [x] Plain text
 - [x] Heading1 - Heading6
