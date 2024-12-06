@@ -252,14 +252,14 @@ nav {
     margin-block-end: 0.3em;
 }
 
-.article-box {
+.post-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between; /* 使內容和圖片之間有空間 */
     background-color: transparent;
 }
 
-.article-image {
+.post-image {
     width: 200px;
     max-height: 150px; /* 4:3 比例 */
     object-fit: cover;
@@ -268,13 +268,13 @@ nav {
     margin-left: 25px !important;
 }
 
-.article-content {
+.post-content {
     display: flex;
     flex-direction: column;
     flex-grow: 1; /* 使內容占據剩餘空間 */
 }
 
-.article-date {
+.post-date {
     display: flex;
     align-items: center;
     margin: 5px 0;
@@ -282,12 +282,12 @@ nav {
     font-size: 80%;
 }
 
-.article-date i {
+.post-date i {
     color: #303030; /* 設置日期圖標顏色為淺色 */
     font-size: 80%;
 }
 
-.article-content p {
+.post-content p {
     color: #303030; /* 設置內文顏色為淺色 */
 }
 
@@ -295,41 +295,41 @@ nav {
     margin-right: 2px;
 }
 
-#articles-list {
+#posts-list {
     display: flex;
     flex-direction: column; /* 垂直方向排列 */
     margin: 0;
 }
 
-#articles-list hr {
+#posts-list hr {
     border: none; /* 移除默認邊框 */
     border-top: 1px solid #bbb; /* 添加頂部邊框作為分割線 */
     margin: 25px 0; /* 添加一些外邊距 */
 }
 
-#articles-list h2 {
+#posts-list h2 {
     margin: 0;
     line-height: 2;
     color: #303030; /* 設置內文顏色為淺色 */
 }
 
-#articles-list h2 a {
+#posts-list h2 a {
     color: #303030; /* 設置內文顏色為淺色 */
     text-decoration: none; /* 移除底線 */
     transition: color 0.3s; /* 添加顏色變化的過渡效果 */
 }
 
-#articles-list h2 a:hover {
+#posts-list h2 a:hover {
     color: gray; /* 滑鼠靠近時變顏色 */
     cursor: pointer; /* 滑鼠靠近時變成指針樣式 */
 }
 
-#articles-list p {
+#posts-list p {
     margin: 0;
     line-height: 2;
 }
 
-#articles-list a {
+#posts-list a {
     margin: 0;
 }
 

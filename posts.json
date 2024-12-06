@@ -4,7 +4,7 @@
         "link": "/?page=2024-csc-writeup",
         "date": "2024-12-01",
         "description": "第一次參加參加金盾獎意外獲獎的心路歷程與心得，還有一點點小 Writeup。",
-        "image": "articles/2024-csc-writeup/04.webp"
+        "image": "posts/2024-csc-writeup/04.webp"
     },
     {
         "title": "2024 CGGC 心得及 Writeup",
@@ -18,13 +18,13 @@
         "link": "/?page=2024-SLM-tunning",
         "date": "2024-09-18",
         "description": "隨著人工智慧技術的發展，加上 Apple 對開源社群的投資，想要在本地運行語言模型已不再是什麼困難的事情，因此我想透過訓練微調模型製作輔導諮商語音聊天機器人。",
-        "image": "articles/2024-SLM-tunning/image.png"
+        "image": "posts/2024-SLM-tunning/image.png"
     },
     {
         "title": "我用 2007 年的迷你電腦安裝 Kali Linux",
         "link": "/?page=2024-EeePC-Kali",
         "date": "2024-09-14",
         "description": "自從 Apple 推出 Arm 規格的 M1 晶片後，許多 CTF 中的 Reverse 和 PWN 題目都無法執行，直到我在家中找到了一台 ASUS 於 2007 年推出的 Eee PC 8G。",
-        "image": "articles/2024-EeePC-Kali/01.webp"
+        "image": "posts/2024-EeePC-Kali/01.webp"
     }
 ]

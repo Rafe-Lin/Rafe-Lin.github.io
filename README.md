@@ -15,8 +15,8 @@ If you find this project useful, please give it a star on GitHub. Your support i
 
 ## Getting started
 
-1. Edit the Markdown file in the [articles directory](articles/).
-2. Edit the JSON config file in [articles.json](articles.json).
+1. Edit the Markdown file in the [posts directory](posts/).
+2. Edit the JSON config file in [posts.json](posts.json).
 3. Have fun!
 
 ## Post Markdown Support Commands

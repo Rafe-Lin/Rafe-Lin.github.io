@@ -5,7 +5,7 @@ if (params.get('page') == "CV") {
 } else if(params.get('page') == null){
     markdownFile = "src/profile.md";
 } else {
-    markdownFile = "articles/" + params.get('page') + ".md"
+    markdownFile = "posts/" + params.get('page') + ".md"
 }
 
 // 使用 fetch API 讀取 Markdown 文件內容
