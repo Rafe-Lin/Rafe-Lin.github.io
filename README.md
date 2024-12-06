@@ -8,14 +8,18 @@ If you have any suggestions for improvements or find any bugs, feel free to fork
 
 If you find this project useful, please give it a star on GitHub. Your support is greatly appreciated!
 
+## Live Demo
+
+Check out the live demo of the blog [1ping.me](https://1ping.me/).
+
 ## Installation
 
-1. Frok and clone this repository.
+1. Fork and clone this repository.
 2. Edit the content you want in [index.html](index.html).
 
-## Getting started
+## Getting Started
 
-1. Edit the Markdown file in the [posts directory](posts/).
+1. Edit the Markdown files in the [posts directory](posts/).
 2. Edit the JSON config file in [posts.json](posts.json).
 3. Have fun!
 
