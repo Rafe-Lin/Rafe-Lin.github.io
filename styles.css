@@ -3,6 +3,96 @@
     src: url('fonts/MesloLGLDZ-Regular.ttf') format('truetype'); /* 根據你的字體文件格式調整 */
 }
 
+/* 電腦版樣式 */
+@media (min-width: 1024px) {
+    nav {
+        width: 1200px;
+    }
+    .container {
+        max-width: 1200px;
+    }
+    footer {
+        width: 1200px;
+    }
+}
+
+/* 手機版樣式 */
+@media (max-width: 1023px) {
+    nav {
+        width: 350px !important;
+        padding: 15px !important;
+        height: 150px !important;
+        display: block !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center;
+    }
+    .nav-left, .nav-center, .nav-right {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .nav-center {
+        position: absolute;
+        left: 50%;
+    }
+    .separator {
+        display: none !important;
+    }
+    .nav-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px; /* 增加底部間距，避免重疊 */
+    }
+    .nav-center a {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .search-box {
+        display: none !important;
+    }
+    .search-box input {
+        width: calc(100% - 40px);
+    }
+    .container {
+        max-width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+    .about-me, .blog-content {
+        margin: 10px 0;
+    }
+    .about-me {
+        width: 350px !important;
+        margin: 25px;
+        margin-bottom: 0px !important;
+    }
+    .about-me img {
+        width: 100%;
+    }
+    .blog-content {
+        width: 350px !important;
+    }
+    .post-image {
+        display: none !important;
+    }
+    .blog-content hr {
+        width: 300px !important;
+    }
+    #blog-content img {
+        width: 300px !important;
+        max-width: 100% !important;
+    }
+    footer {
+        width: 350px !important;
+        padding: 10px;
+    }
+}
+
 body {
     margin: 0;
     display: flex;
@@ -16,7 +106,7 @@ nav {
     color: black;
     padding: 25px;
     height: 100px;
-    width: 1200px;
+    width: 1024px;
     box-sizing: border-box;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
@@ -24,6 +114,10 @@ nav {
     justify-content: space-between;
     align-items: center; /* 垂直置中 */
     position: relative; /* 為了讓子元素使用絕對定位 */
+}
+
+p {
+    word-break: break-word;
 }
 
 .blog-title {
@@ -121,8 +215,7 @@ nav {
 .container {
     display: flex;
     flex: 1;
-    margin-top: 25px;
-    max-width: 1200px;
+    max-width: 1024px;
 }
 
 .container p {
@@ -169,11 +262,13 @@ nav {
     text-align: center;
     padding: 25px;
     height: 100%;
+    margin-bottom: 25px;
+    margin-top: 25px;
 }
 
 .about-me {
     background-color: #d9d9d9;
-    width: 300px;
+    width: 250px;
     box-sizing: border-box;
     margin-right: 25px;
     border-radius: 25px;
@@ -188,7 +283,7 @@ nav {
 .blog-content {
     font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
     background-color: #d9d9d9;
-    width: 875px;
+    width: 749px;
     box-sizing: border-box;
     border-radius: 25px;
     display: flex;
@@ -252,6 +347,10 @@ nav {
     margin-block-end: 0.3em;
 }
 
+#html-output img {
+    border-radius: 8px; /* 你可以根據需要調整這個值 */
+}
+
 .post-box {
     display: flex;
     flex-direction: row;
@@ -298,7 +397,6 @@ nav {
 #posts-list {
     display: flex;
     flex-direction: column; /* 垂直方向排列 */
-    margin: 0;
 }
 
 #posts-list hr {
@@ -406,7 +504,7 @@ nav {
 
 .blog-content hr {
     margin: 8px, 0;
-    width: 825px;
+    width: 699px;
     border-color: rgb(177, 177, 177);
 }
 
@@ -431,13 +529,12 @@ nav {
 
 footer {
     background-color: #d9d9d9;
-    width: 1200px;
+    width: 1024px;
     box-sizing: border-box;
     justify-content: flex-start;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
     position: relative; /* 固定在頁面底部 */
-    margin-top: 25px;
     bottom: 0;
     padding: 15px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
