@@ -18,23 +18,23 @@
 
 p.s. 不知道為什麼，聽說有去 AIS3 的都沒上（我們這組只有兩個去過 AIS3 Junior）。
 
-![初賽合照](articles/2024-csc-writeup/01.webp)
+![初賽合照](posts/2024-csc-writeup/01.webp)
 
 ## 決賽
 
 今年決賽在臺北文創大樓舉辦，場地環境非常讚。先說最重要的午餐部分，聽說是因為麥當勞無法配合，所以就沒有延續金盾的傳統，今年改吃肯德基。
 
-![決賽報到處](articles/2024-csc-writeup/02.webp)
+![決賽報到處](posts/2024-csc-writeup/02.webp)
 
 再來說說次要的紀念品部分，一到決賽現場領取識別證就有尊榮的感受（誤），識別證是一張一卡通，超讚的！！雖然今年的紀念品沒有去年的疊疊樂，但有一個金盾的抱枕，也很讚，還有一件襯衫和其他小東西，襯衫和工作人員的顏色不太一樣，但真的超像得來速的麥胞 XD。
 
-![穿襯衫的工作人員（超像麥胞）](articles/2024-csc-writeup/03.webp)
+![穿襯衫的工作人員（超像麥胞）](posts/2024-csc-writeup/03.webp)
 
-![紀念品們](articles/2024-csc-writeup/04.webp)
+![紀念品們](posts/2024-csc-writeup/04.webp)
 
 好啦，最重要的還是比賽本身，金盾決賽包含一般試題、教學試題和情境題，過程中網路都是完全開放的，除了不能對外和其他人聯絡，還有為了避免大家使用 AI，所以禁止使用任何形式的 Chatbot（本來還想說搞不好可以帶一台 Mac Studio 架 SLM 的說）。
 
-![題目分佈](articles/2024-csc-writeup/05.webp)
+![題目分佈](posts/2024-csc-writeup/05.webp)
 
 一般試題和教學試題都是在競賽區進行，題目第一個解開的隊伍可以獲得全部的分數，之後解開該題的其他隊伍分數要打 9 折。教學題可以選擇要不要打開教學文件，如果打開教學文件的話，該題的分數會變成原本的 1/3。
 
@@ -42,20 +42,20 @@ p.s. 不知道為什麼，聽說有去 AIS3 的都沒上（我們這組只有兩
 
 p.s. 記得要帶隨身碟和確保電腦可以連接 RJ45，現場只提供有線的網路。
 
-![決賽場地圖](articles/2024-csc-writeup/06.webp)
+![決賽場地圖](posts/2024-csc-writeup/06.webp)
 
 情境題會在競賽期間，抽出一段時間去情境試題區考試（這次是 50 分鐘）。今年情境題有兩個題目，報到時會抽籤決定，我們抽到的是「GCB 顧問公司」，報到後到會有開幕典禮才開始比賽，所以在這段時間可以趕快查關鍵字，我們就很認真的看了[國家資通安全研究院的政府組態基準(GCB)](https://www.nics.nat.gov.tw/core_business/cybersecurity_defense/GCB/)，結果題目根本跟這個完全沒關係，最後完全就不會做，在那邊耗了 50 分鐘拿了 0 分就趕快回去打其他題目了。不過這次國高中組好像沒有隊伍拿到情境題的分數。
 
-![情境題說明](articles/2024-csc-writeup/07.webp)
+![情境題說明](posts/2024-csc-writeup/07.webp)
 
 最後在競賽結束的 30 分鐘前，外面的計分板被關掉，當時我們第五，最後 30 分鐘很想再打一題衝上去，又很擔心其他隊伍超過我們，好險最後還是拿到鋒芒畢露獎。接下來就是頒獎合照然後和一堆大人物合照。
 
-![合照](articles/2024-csc-writeup/08.webp)
+![合照](posts/2024-csc-writeup/08.webp)
 
-![合照](articles/2024-csc-writeup/09.webp)
+![合照](posts/2024-csc-writeup/09.webp)
 
-![合照](articles/2024-csc-writeup/10.webp)
+![合照](posts/2024-csc-writeup/10.webp)
 
-![合照](articles/2024-csc-writeup/11.webp)
+![合照](posts/2024-csc-writeup/11.webp)
 
 文章就差不多到這邊了，如果有任何問題，歡迎來信詢問：sunyipingtw@icloud.com

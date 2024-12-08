@@ -107,7 +107,7 @@ python chat.py
     
 > 6. 現在你可以和一個經過微調，讓說話模式變得很像酸民的聊天機器人。
     
-![Screenshot 2024-07-23 at 00.15.18.png](articles/2024-SLM-tunning/image.png)
+![Screenshot 2024-07-23 at 00.15.18.png](posts/2024-SLM-tunning/image.png)
     
 
 ## Step 4: 語音生成
