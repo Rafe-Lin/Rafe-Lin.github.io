@@ -10,7 +10,7 @@ If you find this project useful, please give it a star on GitHub. Your support i
 
 ## Live Demo
 
-Check out the live demo of the blog [1ping.me](https://1ping.me/).
+Check out the live demo of the blog [1ping.org](https://1ping.org/).
 
 ## Installation
 
