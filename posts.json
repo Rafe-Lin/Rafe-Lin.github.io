@@ -7,29 +7,4 @@
         "image": "posts/2024-csc-writeup/04.webp",
         "keywords": ["blog", "CGC", "post", "writeup", "金盾獎", "CTF"]
 
-    },
-    {
-        "title": "2024 CGGC 心得及 Writeup",
-        "link": "/?page=2024-CGGC-writeup",
-        "date": "2024-11-10",
-        "description": "第一次和別人組隊打 CTF，同時也是最認真打 CTF 的一次經驗。",
-        "image": null,
-        "keywords": ["blog", "CGGC", "post", "writeup", "CTF"]
-    },
-    {
-        "title": "微調小型語言模型（SLM）製作輔導諮商語音聊天機器人",
-        "link": "/?page=2024-SLM-tunning",
-        "date": "2024-09-18",
-        "description": "隨著 AI 技術發展和 Apple 對開源社群的投資，本地運行語言模型變得容易，我想訓練微調模型製作輔導諮商語音聊天機器人。",
-        "image": "posts/2024-SLM-tunning/image.png",
-        "keywords": ["blog", "SLM", "post", "AI", "tunning"]
-    },
-    {
-        "title": "我用 2007 年的迷你電腦安裝 Kali Linux",
-        "link": "/?page=2024-EeePC-Kali",
-        "date": "2024-09-14",
-        "description": "自 Apple 推出 M1 晶片後，許多 CTF 中的 Reverse 和 PWN 題目無法執行，直到我找到一台 2007 年的 ASUS Eee PC 8G。",
-        "image": "posts/2024-EeePC-Kali/01.webp",
-        "keywords": ["blog", "mini", "post", "kali", "linux", "eeepc", "CTF"]
     }
-]
