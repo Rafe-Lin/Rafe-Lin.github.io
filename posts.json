@@ -2,7 +2,7 @@
    
     {
         "title": "Scratch 1 Hour Course",
-        "link": "/?page=Scratch-1-hour-course",  // 不要.md
+        "link": "/?page=Scratch-1-hour-course",  
         "date": "2025-3-29",
         "description": "這是給有 Scratch 基礎的人的一小時課程，目標是: (1) 先做出遊戲基本設定 (2) 學生自行創造地圖 (3) 加上其他遊戲元素",
         "image": "posts/Scratch 1 hour course/SC 2025-03-29 163306.png",
