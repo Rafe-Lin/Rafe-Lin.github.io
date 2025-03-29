@@ -1,11 +1,11 @@
 [    
     {
-        "title": "高中職跨校資安社團 社團交流活動舉辦紀錄與心得",
-        "link": "/?page=2025-Zeroday-c00kie-winter-event",
-        "date": "2025-03-02",
-        "description": "為了促進社員間的互動、交流及成長，於 2025 年 1 月 23 日（沒錯，遲發了一個多月 XD）在臺北市立復興高級中學舉辦社團的社團交流活動。在這篇文章中，將呈現活動籌備、活動進行以及最後的總結和反思等內容。",
-        "image": "posts/2025-Zeroday-c00kie-winter-event/image.webp",
-        "keywords": ["資安", "Cybersecurity", "世界咖啡館", "遊戲化", "交流", "post", "blog"]
+        "title": "我用 2007 年的迷你電腦安裝 Kali Linux",
+        "link": "/?page=2024-EeePC-Kali",
+        "date": "2024-09-14",
+        "description": "自 Apple 推出 M1 晶片後，許多 CTF 中的 Reverse 和 PWN 題目無法執行，直到我找到一台 2007 年的 ASUS Eee PC 8G。",
+        "image": "posts/2024-EeePC-Kali/01.webp",
+        "keywords": ["blog", "mini", "post", "kali", "linux", "eeepc", "CTF"]
 
     }
     /* {
