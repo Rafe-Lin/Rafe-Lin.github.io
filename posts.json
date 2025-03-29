@@ -1,39 +1,12 @@
 [    
    
     {
-        "title": "test",
-        "link": "/?page=2025-Zeroday-c00kie-winter-event",
-        "date": "2025-03-02",
-        "description": "test",
-        "image": "posts/2025-Zeroday-c00kie-winter-event/image.webp",
-        "keywords": ["資安", "Cybersecurity", "世界咖啡館", "遊戲化", "交流", "post", "blog"]
-
-    },
-    {
-        "title": "快速搞懂 Wi-Fi 安全協議：WEP、WPA、WPA2、WPA3",
-        "link": "/?page=2025-wifi-security",
-        "date": "2025-03-01",
-        "description": "在連線 Wi-Fi 或設定家裡的 Wi-Fi Router 時，經常在安全協議的選項看到，可以選擇 WEP、WPA、WPA2、WPA3 等。他們分別代表了什麼？又存在著哪些差異呢？",
-        "image": "posts/2025-wifi-security/image.webp",
-        "keywords": ["Wifi", "Wifi Router", "4-way Handshake", "WEP", "WPA", "WPA2", "WPA3", "post", "blog"]
-
-    },
-    {
-        "title": "擺脫 HackMD 圖片上傳 1MB 的限制：整合 Imgur API 到 MacOS 快速動作",
-        "link": "/?page=2025-imgur-api-quick-action",
-        "date": "2025-03-01",
-        "description": "在使用 HackMD 時，如果要上傳一張圖片，當圖片超過 1MB 時，總會被告知無法上傳，然而一張螢幕截圖往往就超過 1MB，除了壓縮圖片犧牲畫質外，就沒有其他簡單又快速的方式嗎？",
-        "image": "posts/2025-imgur-api-quick-action/image.webp",
-        "keywords": ["Hackmd", "Imgur", "Quick Action", "Mac", "post", "blog"]
-
-    },
-    {
-        "title": "當資安遇上密室逃脫：一群高中生以資安為主題製作密室逃脫的故事",
-        "link": "/?page=2025-Cybersecurity-escape-room",
-        "date": "2025-02-13",
-        "description": "在上學期（113–1）校內科技進階課程中，老師規劃帶領我們共同製作一場密室逃脫活動，並藉由學校期末的學習分享會活動進行展示及開放外賓遊玩體驗。",
-        "image": "posts/2025-Cybersecurity-escape-room/image.webp",
-        "keywords": ["密室逃脫", "資安", "post", "blog"]
+        "title": "Scratch 1 Hour Course",
+        "link": "/?page=Scratch 1 hour course.md",
+        "date": "2025-3-29",
+        "description": "這是給有 Scratch 基礎的人的一小時課程，目標是: (1) 先做出遊戲基本設定 (2) 學生自行創造地圖 (3) 加上其他遊戲元素",
+        "image": "posts/Scratch 1 hour course/SC 2025-03-29 163306.png",
+        "keywords": ["blog", "post", "writeup"]
 
     },
     {
