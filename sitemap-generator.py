@@ -7,7 +7,7 @@ with open('posts.json', 'r', encoding='utf-8') as file:
     posts = json.load(file)
 
 # 定義網站的根目錄
-domain = "https://rafe-lin.github.io/" #https://1ping.org
+domain = "https://1ping.org" #https://rafe-lin.github.io/
 
 # 定義本來就有的連結
 existing_links = [
