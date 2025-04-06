@@ -1,10 +1,7 @@
----
-title: 2025-scratch-1-hour-course
+# 2025-scratch-1-hour-course
 
 ---
 
-# Scratch 1 hour course
-[TOC]
 
 - 這是給有 Scratch 基礎的人的一小時課程，目標是:
 (1) 先做出遊戲基本設定
