@@ -40,43 +40,20 @@ function displayPostList() {
         });
 }
 
-const params = new URLSearchParams(window.location.search);
-
-if (params.get('page') === 'ls Posts') {
-    fetch('posts.json')
-        .then(response => response.json())
-        .then(posts => {
-            let html = '<h1>Posts</h1><hr>';
-            posts.forEach(post => {
-                html += `
-                    <div class="post-item">
-                        <h3><a href="${post.link}">${post.title}</a></h3>
-                        <p><small>發布日期：${post.date}</small></p>
-                        <p>${post.description}</p>
-                    </div>
-                    <hr>
-                `;
-            });
-            document.getElementById('html-output').innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Error fetching posts.json:', error);
-            document.getElementById('html-output').innerHTML = '<h1>Posts</h1><hr><p>Could not load post list.</p>';
-        });
-} else {
+function displayMarkdownPage(page) {
     let markdownFile = "";
-    if (params.get('page') == "CV") {
+    if (page === "CV") {
         markdownFile = "src/CV.md";
-    } else if (params.get('page') == null) {
+    } else if (page === null) {
         markdownFile = "src/profile.md";
     } else {
-        markdownFile = "posts/" + params.get('page') + ".md";
+        markdownFile = `posts/${page}.md`;
     }
 
     fetch(markdownFile)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`File not found: ${markdownFile}`);
             }
             return response.text();
         })
@@ -86,7 +63,11 @@ if (params.get('page') === 'ls Posts') {
         })
         .catch(error => {
             console.error('Error fetching the Markdown file:', error);
-            document.getElementById('html-output').innerHTML = '<h2>404 - Page Not Found</h2><p>The requested page does not exist.</p>';
+            document.getElementById('html-output').innerHTML = `
+                <h1 class="glow-text">404 - Not Found</h1>
+                <p>The requested content could not be found.</p>
+                <p><i>${error.message}</i></p>
+            `;
         });
 }
 
