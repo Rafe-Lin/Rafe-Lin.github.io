@@ -43,11 +43,7 @@ function loadposts() {
 
                 postsList.appendChild(postDiv);
 
-                // 如果不是最後一個文章，添加分割線
-                if (index < posts.length - 1) {
-                    const hr = document.createElement('hr');
-                    postsList.appendChild(hr);
-                }
+                
             });
         })
         .catch(error => console.error('Error loading posts:', error));
