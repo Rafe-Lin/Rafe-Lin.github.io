@@ -1,13 +1,15 @@
 
 
-const params = new URLSearchParams(window.location.search);
-const page = params.get('page');
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page');
 
-if (page === 'posts') {
-    displayPostList();
-} else {
-    displayMarkdownPage(page);
-}
+    if (page === 'posts') {
+        displayPostList();
+    } else {
+        displayMarkdownPage(page);
+    }
+});
 
 function displayPostList() {
     const mainContent = document.getElementById('blog-content');
