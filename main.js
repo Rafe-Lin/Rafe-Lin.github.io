@@ -1,47 +1,54 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page');
+    const blogContent = document.getElementById('blog-content');
+    const postsList = document.getElementById('posts-list');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
-    const searchResultsContainer = document.getElementById('search-results');
-    let posts = [];
+    if (page === 'posts') {
+        blogContent.style.display = 'none';
+        postsList.style.display = 'flex';
+        loadposts();
+    } else {
+        blogContent.style.display = 'flex';
+        postsList.style.display = 'none';
+    }
+});
 
-    // Fetch posts data
+function loadposts() {
     fetch('posts.json')
         .then(response => response.json())
-        .then(data => {
-            posts = data;
+        .then(posts => {
+            const postsList = document.getElementById('posts-list');
+            postsList.innerHTML = '';
+
+            posts.forEach((post, index) => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post-box';
+                postDiv.innerHTML = `
+                    <div class="post-content">
+                        <h2><a href="${post.link}">${post.title}</a></h2>
+                        <p class="post-date"><i class="fas fa-calendar-alt calendar-icon"></i> ${post.date}</p>
+                        <p>${post.description}</p>
+                    </div>
+                `;
+
+                // 如果照片欄位不為 null，添加照片
+                if (post.image) {
+                    const img = document.createElement('img');
+                    img.src = post.image;
+                    img.alt = post.title;
+                    img.className = 'post-image';
+                    postDiv.appendChild(img);
+                }
+
+                postsList.appendChild(postDiv);
+
+                // 如果不是最後一個文章，添加分割線
+                if (index < posts.length - 1) {
+                    const hr = document.createElement('hr');
+                    postsList.appendChild(hr);
+                }
+            });
         })
-        .catch(error => console.error('Error fetching posts:', error));
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        if (query.length > 0) {
-            const filteredPosts = posts.filter(post => 
-                post.title.toLowerCase().includes(query) || 
-                post.description.toLowerCase().includes(query)
-            );
-            displayResults(filteredPosts);
-        } else {
-            searchResultsContainer.style.display = 'none';
-        }
-    });
-
-    function displayResults(results) {
-        if (results.length > 0) {
-            const resultsHtml = results.map(post => 
-                `<a href="${post.link}">${post.title}</a>`
-            ).join('');
-            searchResultsContainer.innerHTML = resultsHtml;
-            searchResultsContainer.style.display = 'block';
-        } else {
-            searchResultsContainer.innerHTML = '<a href="#">No results found</a>';
-            searchResultsContainer.style.display = 'block';
-        }
-    }
-
-    // Hide results when clicking outside
-    document.addEventListener('click', (event) => {
-        if (!searchResultsContainer.contains(event.target) && event.target !== searchInput) {
-            searchResultsContainer.style.display = 'none';
-        }
-    });
-});
+        .catch(error => console.error('Error loading posts:', error));
+}

@@ -1,40 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline - Rafe0's Blog</title>
-    <link rel="stylesheet" href="futuristic.css">
+    <link rel="stylesheet" href="timeline.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <nav>
-        <div class="nav-left">
-            <a href="/" class="blog-title">Rafe0's Blog</a>
+    <div class="timeline-wrapper">
+        <header class="timeline-header">
+            <a href="/" class="back-link">&lt; 返回主頁</a>
+            <h1>./TIMELINE</h1>
+        </header>
+        <div id="timeline-container" class="timeline">
+            <!-- Timeline events will be injected here by timeline.js -->
         </div>
-        <div class="nav-center">
-            <a href="/?page=posts">ls Posts</a>
-            <a class="separator">|</a>
-            <a href="/timeline.html">cat timeline.log</a>
-            <a class="separator">|</a>
-            <a href="/?page=CV">tail Experience.log</a>
-        </div>
-        <div class="nav-right">
-        </div>
-    </nav>
-
-    <div class="container">
-        <main class="page-main" id="timeline-container">
-            <h1 class="glow-text">Timeline</h1>
-            <!-- Timeline events will be injected here by JavaScript -->
-        </main>
     </div>
-
-    <footer>
-        <p>© 2024 1P!ng. All rights reserved.</p>
-    </footer>
-
     <script src="timeline.js"></script>
 </body>
 </html>
