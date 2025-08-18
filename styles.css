@@ -402,6 +402,11 @@ footer {
 }
 
 /* Timeline Styles */
+#timeline-page-content {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 #timeline-page-content .timeline {
     position: relative;
     padding: 20px 0;
