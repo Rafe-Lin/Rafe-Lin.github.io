@@ -42,12 +42,41 @@ function displayPostList() {
 
 const params = new URLSearchParams(window.location.search);
 
-function fetchMarkdown(markdownFile) {
+if (params.get('page') === 'ls Posts') {
+    fetch('posts.json')
+        .then(response => response.json())
+        .then(posts => {
+            let html = '<h1>Posts</h1><hr>';
+            posts.forEach(post => {
+                html += `
+                    <div class="post-item">
+                        <h3><a href="${post.link}">${post.title}</a></h3>
+                        <p><small>發布日期：${post.date}</small></p>
+                        <p>${post.description}</p>
+                    </div>
+                    <hr>
+                `;
+            });
+            document.getElementById('html-output').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error fetching posts.json:', error);
+            document.getElementById('html-output').innerHTML = '<h1>Posts</h1><hr><p>Could not load post list.</p>';
+        });
+} else {
+    let markdownFile = "";
+    if (params.get('page') == "CV") {
+        markdownFile = "src/CV.md";
+    } else if (params.get('page') == null) {
+        markdownFile = "src/profile.md";
+    } else {
+        markdownFile = "posts/" + params.get('page') + ".md";
+    }
+
     fetch(markdownFile)
         .then(response => {
             if (!response.ok) {
-                document.getElementById('html-output').innerHTML = '<h2>404 - Page Not Found</h2><p>The requested page does not exist.</p>';
-                throw new Error('Page not found');
+                throw new Error('Network response was not ok');
             }
             return response.text();
         })
@@ -57,37 +86,8 @@ function fetchMarkdown(markdownFile) {
         })
         .catch(error => {
             console.error('Error fetching the Markdown file:', error);
+            document.getElementById('html-output').innerHTML = '<h2>404 - Page Not Found</h2><p>The requested page does not exist.</p>';
         });
-}
-
-if (params.get('page') == "CV") {
-    fetchMarkdown("src/CV.md");
-} else if (params.get('page') == null) {
-    fetchMarkdown("src/profile.md");
-} else if (params.get('page') == "ls Posts") {
-    document.getElementById('html-output').innerHTML = '<h1>Posts</h1><hr>';
-    fetch("posts.json")
-        .then(response => response.json())
-        .then(posts => {
-            let postsHtml = '';
-            posts.forEach(post => {
-                postsHtml += `
-                    <div class="post-item">
-                        <h3><a href="${post.link}">${post.title}</a></h3>
-                        <p><small>發布日期：${post.date}</small></p>
-                        <p>${post.description}</p>
-                    </div>
-                    <hr>
-                `;
-            });
-            document.getElementById('html-output').innerHTML += postsHtml;
-        })
-        .catch(error => {
-            console.error('Error fetching posts.json:', error);
-            document.getElementById('html-output').innerHTML += '<p>無法載入文章列表。</p>';
-        });
-} else {
-    fetchMarkdown("posts/" + params.get('page') + ".md");
 }
 
 function markdownToHtml(markdown) {
