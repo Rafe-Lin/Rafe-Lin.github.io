@@ -333,11 +333,6 @@ nav {
     flex-shrink: 0;
 }
 
-.post-image-placeholder {
-    width: 150px;
-    flex-shrink: 0;
-}
-
 .posts-list .post-content h2 a {
     color: #fff;
 }

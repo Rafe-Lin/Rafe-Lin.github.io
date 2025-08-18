@@ -1,15 +1,13 @@
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page');
+const params = new URLSearchParams(window.location.search);
+const page = params.get('page');
 
-    if (page === 'posts') {
-        displayPostList();
-    } else {
-        displayMarkdownPage(page);
-    }
-});
+if (page === 'posts') {
+    displayPostList();
+} else {
+    displayMarkdownPage(page);
+}
 
 function displayPostList() {
     const mainContent = document.getElementById('blog-content');
@@ -23,10 +21,9 @@ function displayPostList() {
         .then(posts => {
             let postsHtml = '';
             posts.forEach(post => {
-                const noImageClass = post.image ? '' : 'no-image';
                 postsHtml += `
-                    <div class="post-box ${noImageClass}">
-                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : '<div class="post-image-placeholder"></div>'}
+                    <div class="post-box">
+                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
                         <div class="post-content">
                             <h2><a href="${post.link}">${post.title}</a></h2>
                             <p class="post-date">${post.date}</p>
@@ -43,20 +40,14 @@ function displayPostList() {
         });
 }
 
-function displayMarkdownPage(page) {
-    let markdownFile = "";
-    if (page === "CV") {
-        markdownFile = "src/CV.md";
-    } else if (page === null) {
-        markdownFile = "src/profile.md";
-    } else {
-        markdownFile = `posts/${page}.md`;
-    }
+const params = new URLSearchParams(window.location.search);
 
+function fetchMarkdown(markdownFile) {
     fetch(markdownFile)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`File not found: ${markdownFile}`);
+                document.getElementById('html-output').innerHTML = '<h2>404 - Page Not Found</h2><p>The requested page does not exist.</p>';
+                throw new Error('Page not found');
             }
             return response.text();
         })
@@ -66,12 +57,37 @@ function displayMarkdownPage(page) {
         })
         .catch(error => {
             console.error('Error fetching the Markdown file:', error);
-            document.getElementById('html-output').innerHTML = `
-                <h1 class="glow-text">404 - Not Found</h1>
-                <p>The requested content could not be found.</p>
-                <p><i>${error.message}</i></p>
-            `;
         });
+}
+
+if (params.get('page') == "CV") {
+    fetchMarkdown("src/CV.md");
+} else if (params.get('page') == null) {
+    fetchMarkdown("src/profile.md");
+} else if (params.get('page') == "ls Posts") {
+    document.getElementById('html-output').innerHTML = '<h1>Posts</h1><hr>';
+    fetch("posts.json")
+        .then(response => response.json())
+        .then(posts => {
+            let postsHtml = '';
+            posts.forEach(post => {
+                postsHtml += `
+                    <div class="post-item">
+                        <h3><a href="${post.link}">${post.title}</a></h3>
+                        <p><small>發布日期：${post.date}</small></p>
+                        <p>${post.description}</p>
+                    </div>
+                    <hr>
+                `;
+            });
+            document.getElementById('html-output').innerHTML += postsHtml;
+        })
+        .catch(error => {
+            console.error('Error fetching posts.json:', error);
+            document.getElementById('html-output').innerHTML += '<p>無法載入文章列表。</p>';
+        });
+} else {
+    fetchMarkdown("posts/" + params.get('page') + ".md");
 }
 
 function markdownToHtml(markdown) {
