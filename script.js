@@ -23,9 +23,10 @@ function displayPostList() {
         .then(posts => {
             let postsHtml = '';
             posts.forEach(post => {
+                const noImageClass = post.image ? '' : 'no-image';
                 postsHtml += `
-                    <div class="post-box">
-                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
+                    <div class="post-box ${noImageClass}">
+                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : '<div class="post-image-placeholder"></div>'}
                         <div class="post-content">
                             <h2><a href="${post.link}">${post.title}</a></h2>
                             <p class="post-date">${post.date}</p>
