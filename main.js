@@ -1,34 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const themeSwitcher = document.getElementById('theme-switcher');
-    const themeIcon = themeSwitcher.querySelector('i');
-
-    // Function to apply theme
-    const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-        } else {
-            document.body.classList.remove('dark-mode');
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-        }
-    };
-
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    applyTheme(savedTheme);
-
-    // Event listener for the theme switcher button
-    themeSwitcher.addEventListener('click', () => {
-        const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        localStorage.setItem('theme', newTheme);
-        applyTheme(newTheme);
-    });
-});
-
 // Fetch and display posts
 fetch('posts.json')
     .then(response => response.json())

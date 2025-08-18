@@ -244,3 +244,13 @@ body.dark-mode { /* Keep for compatibility, but no overrides needed */ }
     .about-me { margin-right: 0; width: 350px !important; }
     nav, footer { width: 100%; }
 }
+
+/* --- Specific Fixes --- */
+.about-me p, .about-me a {
+    color: var(--text-color) !important;
+    text-shadow: 0 0 3px var(--primary-glow) !important;
+}
+
+.about-me .icon-plantext a[style*="color: #888888"] { 
+    opacity: 0.7;
+}

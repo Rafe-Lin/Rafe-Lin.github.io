@@ -6,6 +6,7 @@ if (page === "CV") {
     markdownFile = "src/CV.md";
 } else if (page === "timeline") {
     markdownFile = "src/timeline.md";
+} else if (page && page !== 'posts') {
     markdownFile = `posts/${page}.md`;
 } else if (!page) {
     markdownFile = "src/profile.md";
@@ -15,7 +16,6 @@ if (markdownFile) {
     fetch(markdownFile)
         .then(response => {
             if (!response.ok) {
-                // For any HTTP error status (like 404), throw an error to be caught by .catch()
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.text();
@@ -26,16 +26,13 @@ if (markdownFile) {
         })
         .catch(error => {
             console.error('Error fetching the Markdown file:', error);
-            // Display a user-friendly 404 message in the content area
             document.getElementById('html-output').innerHTML = '<h1>404</h1><p>File not found.</p>';
         });
 }
 
-// The rest of the markdownToHtml function remains the same...
-
 // 將 Markdown 轉換為 HTML 的函式
 function markdownToHtml(markdown) {
-    // 定義正則表達式模式和標誌
+    // This is the original, stable parser.
     const patterns = {
         heading6: { pattern: "^###### (.*)$", flags: "gm", replacement: "<h6>$1</h6>" },
         heading5: { pattern: "^##### (.*)$", flags: "gm", replacement: "<h5>$1</h5>" },
@@ -50,16 +47,16 @@ function markdownToHtml(markdown) {
             return `<pre><code class="language-${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
         }},
         inlineCode: { pattern: "`([^"]+)"", flags: "gm", replacement: "<code>$1</code>" },
-        link: { pattern: "(?<!\\!)\\\[([\\\\]+)\\\]\\(([^)]+)\\\\(?<!\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" },
-        image: { pattern: "!\\{\[([\\\\]*)\\\]\\(([^)]+)\\\\(?<!\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
+        link: { pattern: "(?<!\\!)\\[([\\\\]+)\\]\(([^)]+)\\(?<!\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" },
+        image: { pattern: "!\\{\[([\\\\]*)\]\(([^)]+)\\(?<!\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
         horizontalRule: { pattern: "^---", flags: "gm", replacement: "<hr />" },
-        checkboxUnchecked: { pattern: "^\\s*\\- \\{\[ \\\\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-off\" disabled/> $1</li></ul>" },
-        checkboxChecked: { pattern: "^\\s*\\- \\{\[x\\\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-on\" disabled checked/> $1</li></ul>" },
-        unorderedList: { pattern: "^(?!\\s*\\- \\{\[ \\\\\\])(?!\\s*\\- \\{\[x\\\\\])\\s*[\\*\\-\\+] (.*)$", flags: "gm", replacement: "<ul><li>$1</li></ul>" },
-        orderedList: { pattern: "^\\s*(\\d+)\\.\\s(.*)$", flags: "gm", replacement: "<ol start=\"$1\"><li"><$2</li></ol>" },
-        blockquote: { pattern: "^> (.*)$", flags: "gm", replacement: "<blockquote>$1</blockquote>" },
+        checkboxUnchecked: { pattern: "^\\s*\\- \\{\[ \\\\ \\].*$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-off\" disabled/> $1</li></ul>" },
+        checkboxChecked: { pattern: "^\\s*\\- \\{\[x\\\\] .*$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-on\" disabled checked/> $1</li></ul>" },
+        unorderedList: { pattern: "^(?!\\s*\\- \\{\[ \\\\ \\\\])(?!\\s*\\- \\{\[x\\\\])\\s*[\\*\\-\\+] (.*)$", flags: "gm", replacement: "<ul><li>$1</li></ul>" },
+        orderedList: { pattern: "^\\s*(\\d+)\\.\\s(.*)$", flags: "gm", replacement: "<ol start=\"$1\"><li\"><$2</li></ol>" },
+        blockquote: { pattern: "> (.*)$", flags: "gm", replacement: "<blockquote>$1</blockquote>" },
         table: {
-            pattern: "^\\|(.+)\\|\\n\\|(?:-+\\|)+\\n((?:\\|.*\\|\\n)*)",
+            pattern: "^\\|(.+)\\|\\n\\|(?:-+\\ |)+\\n((?:\\|.*\\|\\n)*)",
             flags: "gm",
             replacement: function(match, header, body) {
                 const headers = header.split('|').map(h => `<th>${h.trim()}</th>`).join('');
