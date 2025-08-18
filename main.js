@@ -1,54 +1,69 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page');
-    const blogContent = document.getElementById('blog-content');
-    const postsList = document.getElementById('posts-list');
+document.addEventListener('DOMContentLoaded', () => {
+    const themeSwitcher = document.getElementById('theme-switcher');
+    const themeIcon = themeSwitcher.querySelector('i');
 
-    if (page === 'posts') {
-        blogContent.style.display = 'none';
-        postsList.style.display = 'flex';
-        loadposts();
-    } else {
-        blogContent.style.display = 'flex';
-        postsList.style.display = 'none';
-    }
+    // Function to apply theme
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+    };
+
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
+    // Event listener for the theme switcher button
+    themeSwitcher.addEventListener('click', () => {
+        const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
 });
 
-function loadposts() {
-    fetch('posts.json')
-        .then(response => response.json())
-        .then(posts => {
-            const postsList = document.getElementById('posts-list');
-            postsList.innerHTML = '';
-
-            posts.forEach((post, index) => {
-                const postDiv = document.createElement('div');
-                postDiv.className = 'post-box';
-                postDiv.innerHTML = `
-                    <div class="post-content">
-                        <h2><a href="${post.link}">${post.title}</a></h2>
-                        <p class="post-date"><i class="fas fa-calendar-alt calendar-icon"></i> ${post.date}</p>
-                        <p>${post.description}</p>
+// Fetch and display posts
+fetch('posts.json')
+    .then(response => response.json())
+    .then(posts => {
+        const postsList = document.getElementById('posts-list');
+        if (postsList) {
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.innerHTML = `
+                    <div class="post-box">
+                        <div class="post-content">
+                            <h2><a href="/?page=${post.filename.replace('.md', '')}">${post.title}</a></h2>
+                            <p>${post.description}</p>
+                            <div class="post-date">
+                                <i class="far fa-calendar-alt calendar-icon"></i>
+                                <span>${post.date}</span>
+                            </div>
+                        </div>
+                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image">` : ''}
                     </div>
+                    <hr>
                 `;
-
-                // 如果照片欄位不為 null，添加照片
-                if (post.image) {
-                    const img = document.createElement('img');
-                    img.src = post.image;
-                    img.alt = post.title;
-                    img.className = 'post-image';
-                    postDiv.appendChild(img);
-                }
-
-                postsList.appendChild(postDiv);
-
-                // 如果不是最後一個文章，添加分割線
-                if (index < posts.length - 1) {
-                    const hr = document.createElement('hr');
-                    postsList.appendChild(hr);
-                }
+                postsList.appendChild(postElement);
             });
-        })
-        .catch(error => console.error('Error loading posts:', error));
-}
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
+
+        if (page === 'posts') {
+            document.getElementById('blog-content').style.display = 'none';
+            postsList.style.display = 'block';
+        } else {
+            document.getElementById('blog-content').style.display = 'block';
+            postsList.style.display = 'none';
+        }
+    })
+    .catch(error => console.error('Error fetching posts:', error));
