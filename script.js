@@ -1,24 +1,37 @@
 const params = new URLSearchParams(window.location.search);
-var markdownFile = "";
-if (params.get('page') == "CV") {
+const page = params.get('page');
+let markdownFile = "";
+
+if (page === "CV") {
     markdownFile = "src/CV.md";
-} else if(params.get('page') == null){
+} else if (page === "timeline") {
+    markdownFile = "src/timeline.md";
+    markdownFile = `posts/${page}.md`;
+} else if (!page) {
     markdownFile = "src/profile.md";
-} else {
-    markdownFile = "posts/" + params.get('page') + ".md"
 }
 
-// 使用 fetch API 讀取 Markdown 文件內容
-fetch(markdownFile)
-    .then(response => response.text())
-    .then(markdownText => {
-        // 將 Markdown 轉換為 HTML
-        const htmlText = markdownToHtml(markdownText);
+if (markdownFile) {
+    fetch(markdownFile)
+        .then(response => {
+            if (!response.ok) {
+                // For any HTTP error status (like 404), throw an error to be caught by .catch()
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(markdownText => {
+            const htmlText = markdownToHtml(markdownText);
+            document.getElementById('html-output').innerHTML = htmlText;
+        })
+        .catch(error => {
+            console.error('Error fetching the Markdown file:', error);
+            // Display a user-friendly 404 message in the content area
+            document.getElementById('html-output').innerHTML = '<h1>404</h1><p>File not found.</p>';
+        });
+}
 
-        // 顯示轉換後的 HTML
-        document.getElementById('html-output').innerHTML = htmlText;
-    })
-    .catch(error => console.error('Error fetching the Markdown file:', error));
+// The rest of the markdownToHtml function remains the same...
 
 // 將 Markdown 轉換為 HTML 的函式
 function markdownToHtml(markdown) {
@@ -34,26 +47,19 @@ function markdownToHtml(markdown) {
         italic: { pattern: "\\*(.*?)\\*", flags: "gm", replacement: "<i>$1</i>" },
         strikethrough: { pattern: "~~(.*?)~~", flags: "gm", replacement: "<del>$1</del>" },
         codeBlock: { pattern: "```([a-z]*)\\n([\\s\\S]*?)```", flags: "gm", replacement: function(match, lang, code) {
-            return `<pre><code class="language-${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</code></pre>`;
+            return `<pre><code class="language-${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
         }},
-        inlineCode: { pattern: "`([^`]+)`", flags: "gm", replacement: "<code>$1</code>" },
-        // 使用前瞻確保不是圖片
-        link: { pattern: "(?<!\\!)\\\[([^\\\]]+)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" },        image: { pattern: "!\\\[([^\\\]]*)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
-        horizontalRule: { pattern: "^---$", flags: "gm", replacement: "<hr />" },
-        // 處理檢核方塊，先於無序列表
-        checkboxUnchecked: { pattern: "^\\s*\\- \\\[ \\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li><input type=\"radio\" class=\"checkbox-off\" disabled/> $1</li></ul>" },
-        checkboxChecked: { pattern: "^\\s*\\- \\\[x\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li><input type=\"radio\" class=\"checkbox-on\" disabled checked/> $1</li></ul>" },// 處理無序列表，匹配星號、連字號和加號，允許前面有空格
-        unorderedList: { pattern: "^(?!\\s*\\- \\[ \\])(?!\\s*\\- \\[x\\])\\s*[\\*\\-\\+] (.*)$", flags: "gm", replacement: "<ul><li>$1</li></ul>" },
-        orderedList: { pattern: "^\\s*(\\d+)\\. (.*)$", flags: "gm", replacement: "<ol start=\"$1\"><li>$2</li></ol>" },
+        inlineCode: { pattern: "`([^"]+)"", flags: "gm", replacement: "<code>$1</code>" },
+        link: { pattern: "(?<!\\!)\\\[([\\\\]+)\\\]\\(([^)]+)\\\\(?<!\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" },
+        image: { pattern: "!\\{\[([\\\\]*)\\\]\\(([^)]+)\\\\(?<!\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
+        horizontalRule: { pattern: "^---", flags: "gm", replacement: "<hr />" },
+        checkboxUnchecked: { pattern: "^\\s*\\- \\{\[ \\\\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-off\" disabled/> $1</li></ul>" },
+        checkboxChecked: { pattern: "^\\s*\\- \\{\[x\\\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li"><input type=\"radio\" class=\"checkbox-on\" disabled checked/> $1</li></ul>" },
+        unorderedList: { pattern: "^(?!\\s*\\- \\{\[ \\\\\\])(?!\\s*\\- \\{\[x\\\\\])\\s*[\\*\\-\\+] (.*)$", flags: "gm", replacement: "<ul><li>$1</li></ul>" },
+        orderedList: { pattern: "^\\s*(\\d+)\\.\\s(.*)$", flags: "gm", replacement: "<ol start=\"$1\"><li"><$2</li></ol>" },
         blockquote: { pattern: "^> (.*)$", flags: "gm", replacement: "<blockquote>$1</blockquote>" },
-        // 處理兩個或更多換行符號
-        paragraphBreak: { pattern: "\n{2,}", flags: "gm", replacement: "</p><p>" },
-        // 處理行尾有兩個或更多空格的換行符號
-        lineBreakWithSpaces: { pattern: " {2,}\n", flags: "gm", replacement: "<br>" },
-        // 處理單個換行符號
-        lineBreak: { pattern: "(?<!<br>)\n", flags: "gm", replacement: " <br>" },
         table: {
-            pattern: "^\\|(.+)\\|\n\\|(?:-+\\|)+\n((?:\\|.*\\|\\n)*)",
+            pattern: "^\\|(.+)\\|\\n\\|(?:-+\\|)+\\n((?:\\|.*\\|\\n)*)",
             flags: "gm",
             replacement: function(match, header, body) {
                 const headers = header.split('|').map(h => `<th>${h.trim()}</th>`).join('');
@@ -66,57 +72,42 @@ function markdownToHtml(markdown) {
         }
     };
 
-    for (const key of ["heading6", "heading5", "heading4", "heading3", "heading2", "heading1", "horizontalRule", "blockquote", "codeBlock", "unorderedList", "orderedList", "checkboxUnchecked", "checkboxChecked", "table"]) {
+    let html = markdown;
+
+    // Process block-level elements first
+    for (const key of ["heading1", "heading2", "heading3", "heading4", 'heading5', 'heading6', "codeBlock", "blockquote", "horizontalRule", "table", "checkboxChecked", "checkboxUnchecked", "unorderedList", "orderedList"]) {
         const { pattern, flags, replacement } = patterns[key];
         const regex = new RegExp(pattern, flags);
-        markdown = markdown.replace(regex, replacement);
+        html = html.replace(regex, replacement);
     }
 
-    // 處理段落和換行
-    const lines = markdown.split('\n');
-    let inParagraph = false;
-    let result = '';
+    // Combine adjacent lists
+    html = html.replace(/<\/ul>\s*<ul>/g, '');
+    html = html.replace(/<\/ol>\s*<ol>/g, '');
 
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        
-        if (line === '') {
-            if (inParagraph) {
-                result += '</p>';
-                inParagraph = false;
-            }
-        } else if (!line.match(/^(<h[1-6]>|<hr>|<blockquote>|<pre>|<ul>|<ol>|<li>|<table>|<\/table>|<tr>|<\/tr>|<th>|<\/th>|<td>|<\/td>)/)) {
-            if (!inParagraph) {
-                result += '<p>';
-                inParagraph = true;
-            }
-            result += line + ' ';
-        } else {
-            if (inParagraph) {
-                result += '</p>';
-                inParagraph = false;
-            }
-            result += line;
+    // Paragraphs
+    html = html.split(/\n{2,}|(<hr \/>)/).filter(Boolean).map(p => {
+        if (p.match(/^<(h[1-6]|ul|ol|li|pre|blockquote|table|hr)/)) {
+            return p;
         }
-    }
+        if(p.trim() === '') return '';
+        return `<p>${p.trim()}</p>`;
+    }).join('\n');
 
-    if (inParagraph) {
-        result += '</p>';
-    }
-
-    // 再處理其他元素
-    for (const key of ["bold", "italic", "strikethrough", "inlineCode", "link", "image", "paragraphBreak", "lineBreakWithSpaces", "lineBreak"]) {
+    // Process inline elements
+    for (const key of ["link", "image", "bold", "italic", "strikethrough", "inlineCode"]) {
         const { pattern, flags, replacement } = patterns[key];
         const regex = new RegExp(pattern, flags);
-        result = result.replace(regex, replacement);
+        html = html.replace(regex, replacement);
     }
+    
+    // Line breaks
+    html = html.replace(/\n/g, '<br>');
 
-    // 合併連續的 <ul> 和 <ol> 列表項
-    result = result.replace(/<\/ul>\s*<ul>/gim, '');
-    result = result.replace(/<\/ol>\s*<ol start="\d+">/gim, '');
+    // Cleanup paragraphs around lists
+    html = html.replace(/<p>\s*<(ul|ol)>/g, '<$1>');
+    html = html.replace(/<\/(ul|ol)>\s*<\/p>/g, '</$1>');
+    html = html.replace(/<p>\s*<br>\s*<\/p>/g, '');
 
-    // 移除多餘的 <p> 標籤，包括那些包含空白字符的情況
-    result = result.replace(/<p>\s*<\/p>/gim, '');
-
-    return result.trim();
+    return html.trim();
 }
