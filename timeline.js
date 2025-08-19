@@ -1,41 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('timeline.json')
-        .then(response => response.json())
-        .then(data => {
-            const timelineContainer = document.getElementById('timeline-container');
-            if (!timelineContainer) return;
-
-            data.forEach((event, index) => {
-                const timelineItem = document.createElement('div');
-                timelineItem.className = 'timeline-item';
-
-                const timelineDot = document.createElement('div');
-                timelineDot.className = 'timeline-dot';
-
-                const timelineContent = document.createElement('div');
-                timelineContent.className = 'timeline-content';
-
-                const timelineDate = document.createElement('span');
-                timelineDate.className = 'timeline-date';
-                timelineDate.textContent = event.date;
-
-                const timelineTitle = document.createElement('h2');
-                timelineTitle.className = 'timeline-title';
-                timelineTitle.textContent = event.title;
-
-                const timelineDescription = document.createElement('p');
-                timelineDescription.className = 'timeline-description';
-                timelineDescription.textContent = event.description;
-
-                timelineContent.appendChild(timelineDate);
-                timelineContent.appendChild(timelineTitle);
-                timelineContent.appendChild(timelineDescription);
-                
-                timelineItem.appendChild(timelineDot);
-                timelineItem.appendChild(timelineContent);
-
-                timelineContainer.appendChild(timelineItem);
-            });
-        })
-        .catch(error => console.error('Error fetching timeline data:', error));
+// 確保在 DOM 完全載入後才執行
+document.addEventListener('DOMContentLoaded', function() {
+    // 檢查當前頁面路徑是否為 timeline.html
+    if (window.location.pathname.endsWith('timeline.html')) {
+        // 只在 timeline.html 頁面載入 timeline.css
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'timeline.css';
+        document.head.appendChild(link);
+    }
 });
