@@ -1,24 +1,28 @@
 const params = new URLSearchParams(window.location.search);
 var markdownFile = "";
-if (params.get('page') == "CV") {
-    markdownFile = "src/CV.md";
-} else if(params.get('page') == null){
-    markdownFile = "src/profile.md";
-} else {
-    markdownFile = "posts/" + params.get('page') + ".md"
+
+// 如果 page 是 'posts'，則不執行任何操作，交給 main.js 處理
+if (params.get('page') !== 'posts') {
+    if (params.get('page') == "CV") {
+        markdownFile = "src/CV.md";
+    } else if(params.get('page') == null){
+        markdownFile = "src/profile.md";
+    } else {
+        markdownFile = "posts/" + params.get('page') + ".md"
+    }
+
+    // 使用 fetch API 讀取 Markdown 文件內容
+    fetch(markdownFile)
+        .then(response => response.text())
+        .then(markdownText => {
+            // 將 Markdown 轉換為 HTML
+            const htmlText = markdownToHtml(markdownText);
+
+            // 顯示轉換後的 HTML
+            document.getElementById('html-output').innerHTML = htmlText;
+        })
+        .catch(error => console.error('Error fetching the Markdown file:', error));
 }
-
-// 使用 fetch API 讀取 Markdown 文件內容
-fetch(markdownFile)
-    .then(response => response.text())
-    .then(markdownText => {
-        // 將 Markdown 轉換為 HTML
-        const htmlText = markdownToHtml(markdownText);
-
-        // 顯示轉換後的 HTML
-        document.getElementById('html-output').innerHTML = htmlText;
-    })
-    .catch(error => console.error('Error fetching the Markdown file:', error));
 
 // 將 Markdown 轉換為 HTML 的函式
 function markdownToHtml(markdown) {
