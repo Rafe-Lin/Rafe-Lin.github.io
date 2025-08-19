@@ -1,8 +1,8 @@
 const params = new URLSearchParams(window.location.search);
 var markdownFile = "";
 
-// 如果 page 是 'posts'，則不執行任何操作，交給 main.js 處理
-if (params.get('page') !== 'posts') {
+// 如果 page 是 'posts' 或 'timeline'，則不執行任何操作，交給 main.js 處理
+if (params.get('page') !== 'posts' && params.get('page') !== 'timeline') {
     if (params.get('page') == "CV") {
         markdownFile = "src/CV.md";
     } else if(params.get('page') == null){
