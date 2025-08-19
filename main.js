@@ -8,10 +8,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const timelineContainer = document.getElementById('timeline-container');
     const aboutMeBox = document.querySelector('.about-me');
     const container = document.querySelector('.container');
+    const pageMain = document.querySelector('.page-main');
 
-    // 如果 URL 參數中有 'page'，就隱藏作者介紹
+    // 如果 URL 參數中有 'page'，就隱藏作者介紹，並讓主內容區塊變寬
     if (page) {
         aboutMeBox.style.display = 'none';
+        pageMain.classList.add('full-width');
     }
 
     // 頁面內容切換邏輯

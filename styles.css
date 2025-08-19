@@ -405,3 +405,73 @@ footer {
         margin-top: 15px;
     }
 }
+
+
+/* Checkbox Styling */
+ul.checkbox {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul.checkbox li {
+    display: flex;
+    align-items: center;
+}
+
+input[type="radio"].checkbox-on,
+input[type="radio"].checkbox-off {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--link-color);
+    border-radius: 3px;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+input[type="radio"].checkbox-on::before {
+    content: '✔';
+    color: var(--link-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+}
+
+input[type="radio"].checkbox-off {
+    background-color: transparent;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    border: 1px solid var(--container-border-color);
+}
+
+th, td {
+    border: 1px solid var(--container-border-color);
+    padding: 8px;
+    text-align: left;
+}
+
+thead {
+    background-color: rgba(0, 255, 255, 0.1);
+}
+
+th {
+    color: var(--link-color);
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(20, 25, 30, 0.3);
+}
+
+.page-main.full-width {
+    width: 100%;
+}
