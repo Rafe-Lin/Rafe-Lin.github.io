@@ -1,9 +1,21 @@
+// main.js - 完整的 DOMContentLoaded 事件監聽器
+
 document.addEventListener("DOMContentLoaded", function() {
     const params = new URLSearchParams(window.location.search);
     const page = params.get('page');
     const blogContent = document.getElementById('blog-content');
     const postsList = document.getElementById('posts-list');
+    const aboutMeBox = document.querySelector('.about-me');
+    const container = document.querySelector('.container');
 
+    // --- 以下是新增的程式碼 ---
+    // 如果 URL 參數中有 'page'，就隱藏作者介紹
+    if (page) {
+        aboutMeBox.style.display = 'none';
+    }
+    // --- 新增結束 ---
+
+    // 頁面內容切換邏輯
     if (page === 'posts') {
         blogContent.style.display = 'none';
         postsList.style.display = 'flex';
@@ -12,6 +24,9 @@ document.addEventListener("DOMContentLoaded", function() {
         blogContent.style.display = 'flex';
         postsList.style.display = 'none';
     }
+    
+    // 淡入顯示內容
+    container.classList.add('loaded');
 });
 
 function loadposts() {

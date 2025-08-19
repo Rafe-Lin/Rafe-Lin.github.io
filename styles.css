@@ -97,8 +97,14 @@ nav {
     max-width: 1024px;
     margin-top: 25px;
     gap: 25px;
+    visibility: hidden; /* 先隱藏 */
+    opacity: 0; /* 設為透明 */
+    transition: opacity 0.3s ease-in-out; /* 加入淡入動畫效果 */
 }
-
+.container.loaded {
+    visibility: visible; /* 讓區塊可見 */
+    opacity: 1; /* 設為不透明 */
+}
 .box {
     background-color: var(--container-bg-color);
     border: 1px solid var(--container-border-color);
