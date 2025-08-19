@@ -1,7 +1,6 @@
 # Curriculum Vitae
 
-
-## 正在努力中
+- 正在努力中
 
 ## 競賽
 
