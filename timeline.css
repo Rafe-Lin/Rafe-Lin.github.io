@@ -1,66 +1,44 @@
-/* Timeline Container */
+/* timeline.css */
+
 .timeline-container {
-    display: flex;
-    flex-direction: column;
     position: relative;
+    padding-left: 40px; /* 為時間線和點提供空間 */
     margin: 20px 0;
 }
 
 .timeline-container::before {
     content: '';
     position: absolute;
-    left: 50%;
+    left: 10px;
     top: 0;
     bottom: 0;
     width: 2px;
     background-color: var(--container-border-color);
-    transform: translateX(-50%);
 }
 
-/* Timeline Item */
 .timeline-item {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 30px;
     position: relative;
-    margin: 10px 0;
-    width: 50%;
+    margin-bottom: 30px;
 }
 
-.timeline-item:nth-child(odd) {
-    align-self: flex-end;
-    justify-content: flex-start;
-    padding-left: 30px;
-    padding-right: 0;
-}
-
-/* Timeline Dot */
 .timeline-dot {
+    position: absolute;
+    left: -31px; /* (40px padding - 10px dot position) + 1px border */
+    top: 5px;
     height: 16px;
     width: 16px;
     background-color: var(--link-color);
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    right: -8px;
     border: 2px solid var(--background-color);
+    border-radius: 50%;
     box-shadow: 0 0 5px var(--link-color);
     z-index: 1;
 }
 
-.timeline-item:nth-child(odd) .timeline-dot {
-    right: auto;
-    left: -8px;
-}
-
-/* Timeline Content */
 .timeline-content {
     background-color: var(--container-bg-color);
     border: 1px solid var(--container-border-color);
     border-radius: 8px;
     padding: 20px;
-    width: calc(100% - 40px);
-    position: relative;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
@@ -82,25 +60,4 @@
     color: var(--primary-text-color);
     line-height: 1.6;
     margin: 0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .timeline-container::before {
-        left: 8px;
-    }
-
-    .timeline-item {
-        width: 100%;
-        padding-left: 40px;
-        padding-right: 0;
-    }
-
-    .timeline-item:nth-child(odd) {
-        padding-left: 40px;
-    }
-
-    .timeline-dot {
-        left: 0;
-    }
 }
