@@ -471,6 +471,10 @@ footer {
     border-radius: 8px;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 150px; /* Set a minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
 }
 
 #timeline-page-content .timeline-item:hover .timeline-content {
