@@ -1,5 +1,13 @@
 [    
-   
+   {
+        "title": "技能競賽-網路安全",
+        "link": "/?page=技能競賽",  
+        "date": "2026-1-30", 
+        "description": "歷屆題目筆記",
+        "image": "/posts/技能競賽/images.jpg",
+        "keywords": ["writeup"]
+
+    },
     {
         "title": "Scratch 1 Hour Course",
         "link": "/?page=2025-scratch-1-hour-course",  
@@ -11,11 +19,11 @@
     },
     {
         "title": "2025 AIS3 junior 心得",
-        "link": "/?page=2024-csc-writeup",
+        "link": "https://www.bing.com/videos/riverview/relatedvideo?q=rick+roll&&mid=8A80C20EEF999DE5A8268A80C20EEF999DE5A826&FORM=VAMGZC",
         "date": "2024-12-01",
-        "description": "正在生",
-        "image": "posts/2024-csc-writeup/04.webp",
-        "keywords": ["blog", "CGC", "post", "writeup", "金盾獎", "CTF"]
+        "description": "因為颱風就變線上的",
+        "image": "posts/2024-csc-writeup/71D5EE11-5259-4637-B6E0-990B4E8853C9.jpg",
+        "keywords": ["blog", "ais3", "post", "writeup", "金盾獎", "CTF"]
 
     }
 ]

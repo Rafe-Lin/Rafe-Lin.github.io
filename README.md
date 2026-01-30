@@ -39,4 +39,4 @@ To enhance your blog posts, you can use the following Markdown commands:
 
 ---
 
-Thank you for using and supporting this project! If you have any questions or suggestions, feel free to contact me: sunyipingtw@icloud.com
+Thank you for using and supporting this project! If you have any questions or suggestions, feel free to contact me: rafe.lin0210@gmail.com
