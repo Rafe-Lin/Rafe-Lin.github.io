@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
         timelineContainer.style.display = 'block';
         loadTimeline();
         loadCss('timeline.css');
-        loadScript('timeline-particles.js');
     } else {
         blogContent.style.display = 'flex';
         postsList.style.display = 'none';

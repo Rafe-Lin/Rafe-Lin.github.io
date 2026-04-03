@@ -1,10 +1,4 @@
-[
-    {
-        "date": "2024-9",
-        "title": "上高中",
-        "description": "加入資研社、開始學 C++"
-    },
-    {
+[       {
         "date": "2025-03",
         "title": "科展",
         "description": "地科科展"
@@ -13,5 +7,12 @@
         "date": "2025-08",
         "title": "AIS3 junior",
         "description": "被電爛，但更了解資安社群"
+    },
+    {
+        "date": "2024-9",
+        "title": "上高中",
+        "description": "加入資研社、開始學 C++"
     }
+
+
 ]

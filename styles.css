@@ -43,6 +43,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    z-index: 1;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
@@ -88,7 +89,8 @@ nav {
 }
 
 .search-box {
-    display: none; /* Hiding search as it might not fit the new theme well without more work */
+    display: none;
+    /* Hiding search as it might not fit the new theme well without more work */
 }
 
 .container {
@@ -97,14 +99,23 @@ nav {
     max-width: 1024px;
     margin-top: 25px;
     gap: 25px;
-    visibility: hidden; /* 先隱藏 */
-    opacity: 0; /* 設為透明 */
-    transition: opacity 0.3s ease-in-out; /* 加入淡入動畫效果 */
+    position: relative;
+    z-index: 1;
+    visibility: hidden;
+    /* 先隱藏 */
+    opacity: 0;
+    /* 設為透明 */
+    transition: opacity 0.3s ease-in-out;
+    /* 加入淡入動畫效果 */
 }
+
 .container.loaded {
-    visibility: visible; /* 讓區塊可見 */
-    opacity: 1; /* 設為不透明 */
+    visibility: visible;
+    /* 讓區塊可見 */
+    opacity: 1;
+    /* 設為不透明 */
 }
+
 .box {
     background-color: var(--container-bg-color);
     border: 1px solid var(--container-border-color);
@@ -207,7 +218,8 @@ nav {
     word-break: break-word;
 }
 
-#html-output p, #html-output li {
+#html-output p,
+#html-output li {
     line-height: 1.7;
 }
 
@@ -217,7 +229,12 @@ nav {
     text-shadow: 0 0 2px var(--link-color);
 }
 
-#html-output h1, #html-output h2, #html-output h3, #html-output h4, #html-output h5, #html-output h6 {
+#html-output h1,
+#html-output h2,
+#html-output h3,
+#html-output h4,
+#html-output h5,
+#html-output h6 {
     color: var(--link-color);
     text-shadow: 0 0 5px var(--link-color);
     margin-top: 1.5em;
@@ -232,7 +249,8 @@ nav {
     display: block;
 }
 
-#html-output pre, #html-output code {
+#html-output pre,
+#html-output code {
     background: var(--code-bg-color);
     font-family: 'MesloLGLDZ', monospace;
     border-radius: 4px;
@@ -272,9 +290,11 @@ nav {
 
 /* Posts List Styling */
 .posts-list {
-    display: flex; /* This is set by main.js, but we confirm the direction */
+    display: flex;
+    /* This is set by main.js, but we confirm the direction */
     flex-direction: column;
-    gap: 20px; /* Creates space between post cards */
+    gap: 20px;
+    /* Creates space between post cards */
 }
 
 .post-box {
@@ -287,7 +307,8 @@ nav {
     box-sizing: border-box;
     transition: all 0.3s ease;
     display: flex;
-    flex-direction: row; /* Image on left, content on right */
+    flex-direction: row;
+    /* Image on left, content on right */
     gap: 25px;
     align-items: center;
 }
@@ -298,16 +319,19 @@ nav {
 }
 
 .post-image {
-    width: 200px; /* Fixed width for the image */
+    width: 200px;
+    /* Fixed width for the image */
     height: 130px;
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid var(--container-border-color);
-    flex-shrink: 0; /* Prevent image from shrinking */
+    flex-shrink: 0;
+    /* Prevent image from shrinking */
 }
 
 .post-content {
-    flex-grow: 1; /* Allow text content to take remaining space */
+    flex-grow: 1;
+    /* Allow text content to take remaining space */
 }
 
 .post-content h2 a {
@@ -340,6 +364,7 @@ nav {
     .post-box {
         flex-direction: column;
     }
+
     .post-image {
         width: 100%;
         max-height: 200px;
@@ -359,11 +384,16 @@ footer {
     color: var(--secondary-text-color);
     font-size: 14px;
     margin-top: 25px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Responsive Design */
 @media (max-width: 1023px) {
-    nav, .container, footer {
+
+    nav,
+    .container,
+    footer {
         width: 100%;
         border-radius: 0;
         border-left: 0;
@@ -396,7 +426,8 @@ footer {
         margin-top: 15px;
     }
 
-    .about-me, .blog-content {
+    .about-me,
+    .blog-content {
         width: 100% !important;
         margin: 0;
     }
@@ -454,7 +485,8 @@ table {
     border: 1px solid var(--container-border-color);
 }
 
-th, td {
+th,
+td {
     border: 1px solid var(--container-border-color);
     padding: 8px;
     text-align: left;
