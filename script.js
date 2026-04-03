@@ -5,7 +5,7 @@ var markdownFile = "";
 if (params.get('page') !== 'posts' && params.get('page') !== 'timeline') {
     if (params.get('page') == "CV") {
         markdownFile = "src/CV.md";
-    } else if(params.get('page') == null){
+    } else if (params.get('page') == null) {
         markdownFile = "src/profile.md";
     } else {
         markdownFile = "posts/" + params.get('page') + ".md"
@@ -20,6 +20,26 @@ if (params.get('page') !== 'posts' && params.get('page') !== 'timeline') {
 
             // 顯示轉換後的 HTML
             document.getElementById('html-output').innerHTML = htmlText;
+
+            // 在文章底部加入分享按鈕（僅在文章頁面、非 CV 頁面顯示）
+            const currentPage = params.get('page');
+            if (currentPage && currentPage !== 'CV' && currentPage !== 'posts' && currentPage !== 'timeline') {
+                const shareContainer = document.createElement('div');
+                shareContainer.className = 'share-container';
+                const shareUrl = window.location.origin + '/share.html?page=' + encodeURIComponent(currentPage);
+                shareContainer.innerHTML = `
+                    <hr style="border:none;height:1px;background:rgba(0,255,255,0.2);margin:2em 0;" />
+                    <button class="share-btn" onclick="copyShareLink(this, '${shareUrl}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <polyline points="16 6 12 2 8 6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        分享這篇文章
+                    </button>
+                `;
+                document.getElementById('html-output').appendChild(shareContainer);
+            }
         })
         .catch(error => console.error('Error fetching the Markdown file:', error));
 }
@@ -37,12 +57,14 @@ function markdownToHtml(markdown) {
         bold: { pattern: "\\*\\*(.*?)\\*\\*", flags: "gm", replacement: "<b>$1</b>" },
         italic: { pattern: "\\*(.*?)\\*", flags: "gm", replacement: "<i>$1</i>" },
         strikethrough: { pattern: "~~(.*?)~~", flags: "gm", replacement: "<del>$1</del>" },
-        codeBlock: { pattern: "```([a-z]*)\\n([\\s\\S]*?)```", flags: "gm", replacement: function(match, lang, code) {
-            return `<pre><code class="language-${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</code></pre>`;
-        }},
+        codeBlock: {
+            pattern: "```([a-z]*)\\n([\\s\\S]*?)```", flags: "gm", replacement: function (match, lang, code) {
+                return `<pre><code class="language-${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</code></pre>`;
+            }
+        },
         inlineCode: { pattern: "`([^`]+)`", flags: "gm", replacement: "<code>$1</code>" },
         // 使用前瞻確保不是圖片
-        link: { pattern: "(?<!\\!)\\\[([^\\\]]+)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" },        image: { pattern: "!\\\[([^\\\]]*)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
+        link: { pattern: "(?<!\\!)\\\[([^\\\]]+)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<a href=\"$2\" target=\"_blank\">$1</a>" }, image: { pattern: "!\\\[([^\\\]]*)\\\]\\\(([^)]+)\\\)", flags: "gm", replacement: "<img src=\"$2\" alt=\"$1\" />" },
         horizontalRule: { pattern: "^---$", flags: "gm", replacement: "<hr />" },
         // 處理檢核方塊，先於無序列表
         checkboxUnchecked: { pattern: "^\\s*\\- \\\[ \\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li><input type=\"radio\" class=\"checkbox-off\" disabled/> $1</li></ul>" },
@@ -59,7 +81,7 @@ function markdownToHtml(markdown) {
         table: {
             pattern: "^\\|(.+)\\|\n\\|(?:-+\\|)+\n((?:\\|.*\\|\\n)*)",
             flags: "gm",
-            replacement: function(match, header, body) {
+            replacement: function (match, header, body) {
                 const headers = header.split('|').map(h => `<th>${h.trim()}</th>`).join('');
                 const rows = body.trim().split('\n').map(row => {
                     const cells = row.split('|').filter(c => c.trim() !== '').map(c => `<td>${c.trim()}</td>`).join('');
@@ -83,7 +105,7 @@ function markdownToHtml(markdown) {
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
-        
+
         if (line === '') {
             if (inParagraph) {
                 result += '</p>';
@@ -123,4 +145,28 @@ function markdownToHtml(markdown) {
     result = result.replace(/<p>\s*<\/p>/gim, '');
 
     return result.trim();
+}
+
+// 分享按鈕：複製連結到剪貼簿
+function copyShareLink(btn, url) {
+    navigator.clipboard.writeText(url).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            已複製連結！
+        `;
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                    <polyline points="16 6 12 2 8 6"/>
+                    <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+                分享這篇文章
+            `;
+        }, 2000);
+    });
 }

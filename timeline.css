@@ -2,7 +2,8 @@
 
 .timeline-container {
     position: relative;
-    padding-left: 40px; /* 為時間線和點提供空間 */
+    padding-left: 40px;
+    /* 為時間線和點提供空間 */
     margin: 20px 0;
 }
 
@@ -14,6 +15,7 @@
     bottom: 0;
     width: 2px;
     background-color: var(--container-border-color);
+    z-index: 1;
 }
 
 .timeline-item {
@@ -23,7 +25,8 @@
 
 .timeline-dot {
     position: absolute;
-    left: -31px; /* (40px padding - 10px dot position) + 1px border */
+    left: -31px;
+    /* (40px padding - 10px dot position) + 1px border */
     top: 5px;
     height: 16px;
     width: 16px;
@@ -39,7 +42,7 @@
     border: 1px solid var(--container-border-color);
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .timeline-date {

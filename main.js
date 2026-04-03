@@ -1,6 +1,6 @@
 // main.js - 完整的 DOMContentLoaded 事件監聽器
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const page = params.get('page');
     const blogContent = document.getElementById('blog-content');
@@ -28,12 +28,13 @@ document.addEventListener("DOMContentLoaded", function() {
         timelineContainer.style.display = 'block';
         loadTimeline();
         loadCss('timeline.css');
+        loadScript('timeline-particles.js');
     } else {
         blogContent.style.display = 'flex';
         postsList.style.display = 'none';
         timelineContainer.style.display = 'none';
     }
-    
+
     // 淡入顯示內容
     container.classList.add('loaded');
 });
@@ -67,7 +68,7 @@ function loadposts() {
 
                 postsList.appendChild(postDiv);
 
-                
+
             });
         })
         .catch(error => console.error('Error loading posts:', error));
@@ -106,7 +107,7 @@ function loadTimeline() {
                 timelineContent.appendChild(timelineDate);
                 timelineContent.appendChild(timelineTitle);
                 timelineContent.appendChild(timelineDescription);
-                
+
                 timelineItem.appendChild(timelineDot);
                 timelineItem.appendChild(timelineContent);
 
@@ -121,4 +122,11 @@ function loadCss(href) {
     link.rel = 'stylesheet';
     link.href = href;
     document.head.appendChild(link);
+}
+
+function loadScript(src) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    document.body.appendChild(script);
 }

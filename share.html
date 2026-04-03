@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafe0's Blog - Shared Post</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="/">
+            <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 0 24 24" width="28">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            </a>
+            <a href="/" class="blog-title">Rafe0's Blog</a>
+        </div>
+        <div class="nav-center">
+            <!-- 分享頁面不顯示導航切換按鈕 -->
+        </div>
+        <div class="nav-right">
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-main full-width">
+            <div class="box blog-content" id="blog-content">
+                <div id="html-output"></div>
+                <script src="script.js"></script>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 Rafe0. All rights reserved.</p>
+    </footer>
+    <script>
+        // 分享頁面：自動讓容器顯示
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.querySelector('.container');
+            container.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
