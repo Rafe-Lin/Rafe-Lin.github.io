@@ -4,7 +4,7 @@
 }
 
 :root {
-    --background-color: #0A0A0A;
+    --background-color: #05060A;
     --primary-glow-color: #00ffff;
     --primary-text-color: #E0E0E0;
     --secondary-text-color: #888888;
@@ -14,10 +14,126 @@
     --link-color: #00ffff;
     --code-bg-color: rgba(135, 131, 120, 0.15);
     --code-text-color: #eb5757;
+
+    /* Liquid glass */
+    --glass-tint: rgba(120, 190, 230, 0.055);
+    --glass-tint-2: rgba(90, 120, 200, 0.03);
+    --glass-blur: blur(26px) saturate(180%) brightness(1.08);
+    --glass-radius: 26px;
+    --glass-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.55),
+        0 2px 10px rgba(0, 0, 0, 0.35);
+    --glass-inner:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -1px 0 rgba(120, 200, 255, 0.06),
+        inset 0 0 40px rgba(90, 200, 255, 0.035);
+}
+
+/* ── Liquid glass 基底 ─────────────────────────────
+   ::before = 折射邊緣（漸層描邊）
+   ::after  = 跟著游標移動的鏡面高光（background-attachment: fixed
+              讓漸層以視窗為座標，等於整頁共用同一個光源）        */
+.glass,
+nav,
+.box,
+.post-box,
+footer {
+    position: relative;
+    isolation: isolate;
+    background-color: transparent;
+    background-image:
+        linear-gradient(160deg, var(--glass-tint), var(--glass-tint-2) 55%, rgba(255, 255, 255, 0.02));
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 0;
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow), var(--glass-inner);
+    transition: box-shadow .45s cubic-bezier(.22, 1, .36, 1),
+        transform .45s cubic-bezier(.22, 1, .36, 1),
+        background-color .45s ease;
+}
+
+.glass::before,
+nav::before,
+.box::before,
+.post-box::before,
+footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background:
+        linear-gradient(150deg,
+            rgba(255, 255, 255, 0.55) 0%,
+            rgba(120, 235, 255, 0.28) 22%,
+            rgba(255, 255, 255, 0.04) 48%,
+            rgba(150, 130, 255, 0.22) 78%,
+            rgba(255, 255, 255, 0.30) 100%);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: .75;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity .45s ease;
+}
+
+.glass::after,
+nav::after,
+.box::after,
+.post-box::after,
+footer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        radial-gradient(480px circle at var(--px, 50vw) var(--py, -20vh),
+            rgba(255, 255, 255, 0.10),
+            rgba(130, 225, 255, 0.055) 38%,
+            rgba(150, 130, 255, 0.02) 60%,
+            transparent 72%);
+    background-attachment: fixed;
+    opacity: .85;
+    mix-blend-mode: screen;
+}
+
+.glass>*,
+nav>*,
+.box>*,
+.post-box>* {
+    position: relative;
+    z-index: 1;
+}
+
+.glass:hover,
+.box:hover,
+.post-box:hover {
+    box-shadow:
+        0 22px 55px rgba(0, 0, 0, 0.6),
+        0 0 22px rgba(0, 225, 255, 0.14),
+        var(--glass-inner);
+}
+
+.glass:hover::before,
+.box:hover::before,
+.post-box:hover::before {
+    opacity: 1;
 }
 
 body {
     background-color: var(--background-color);
+    /* 深太空：中央略亮、邊緣沉入純黑 */
+    background-image: radial-gradient(ellipse 120% 80% at 50% 8%, #0b1018 0%, #06080d 45%, #020204 100%);
+    background-attachment: fixed;
     color: var(--primary-text-color);
     font-family: 'MesloLGLDZ', monospace;
     margin: 0;
@@ -29,22 +145,17 @@ body {
 }
 
 nav {
-    background-color: var(--container-bg-color);
-    backdrop-filter: blur(10px);
     color: var(--primary-text-color);
-    padding: 25px;
+    padding: 22px 28px;
     width: 1024px;
     box-sizing: border-box;
-    border: 1px solid var(--container-border-color);
-    border-top: 0;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
+    border-radius: 0 0 var(--glass-radius) var(--glass-radius);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
 .nav-left a,
@@ -117,17 +228,8 @@ nav {
 }
 
 .box {
-    background-color: var(--container-bg-color);
-    border: 1px solid var(--container-border-color);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 25px;
+    padding: 26px;
     box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.box:hover {
-    box-shadow: 0 0 10px var(--container-hover-shadow-color);
 }
 
 .about-me {
@@ -141,8 +243,8 @@ nav {
     width: 150px;
     height: 150px;
     object-fit: cover;
-    border: 2px solid var(--container-border-color);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .about-me .name {
@@ -173,9 +275,11 @@ nav {
 }
 
 .icon-container {
-    background-color: rgba(0, 255, 255, 0.1);
-    border-radius: 5px;
-    padding: 5px;
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(0, 200, 255, 0.06));
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -289,23 +393,28 @@ nav {
 }
 
 /* Posts List Styling */
+/* 文章列表本身不是玻璃，讓每張卡片各自浮在星空上 */
 .posts-list {
     display: flex;
     /* This is set by main.js, but we confirm the direction */
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
     /* Creates space between post cards */
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.posts-list::before,
+.posts-list::after {
+    display: none;
 }
 
 .post-box {
-    /* Apply the same base style as other boxes for consistency */
-    background-color: var(--container-bg-color);
-    border: 1px solid var(--container-border-color);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 25px;
+    padding: 24px;
     box-sizing: border-box;
-    transition: all 0.3s ease;
     display: flex;
     flex-direction: row;
     /* Image on left, content on right */
@@ -314,8 +423,7 @@ nav {
 }
 
 .post-box:hover {
-    box-shadow: 0 0 10px var(--container-hover-shadow-color);
-    transform: translateY(-5px);
+    transform: translateY(-4px) scale(1.006);
 }
 
 .post-image {
@@ -323,8 +431,9 @@ nav {
     /* Fixed width for the image */
     height: 130px;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--container-border-color);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
     /* Prevent image from shrinking */
 }
@@ -372,14 +481,10 @@ nav {
 }
 
 footer {
-    background-color: var(--container-bg-color);
-    border: 1px solid var(--container-border-color);
-    border-bottom: 0;
     width: 1024px;
     box-sizing: border-box;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    padding: 15px;
+    border-radius: var(--glass-radius) var(--glass-radius) 0 0;
+    padding: 18px;
     text-align: center;
     color: var(--secondary-text-color);
     font-size: 14px;
@@ -547,4 +652,20 @@ tbody tr:nth-child(even) {
 
 .share-btn svg {
     flex-shrink: 0;
+}
+
+/* 尊重「減少動態」偏好：關掉位移與高光動畫 */
+@media (prefers-reduced-motion: reduce) {
+
+    .glass,
+    nav,
+    .box,
+    .post-box,
+    footer {
+        transition: none;
+    }
+
+    .post-box:hover {
+        transform: none;
+    }
 }
