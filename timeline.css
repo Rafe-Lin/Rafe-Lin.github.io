@@ -1,8 +1,15 @@
-/* timeline.css */
+/* timeline.css — 捲動漸進展開的時間軸
+   （本檔只在 ?page=timeline 時由 main.js 動態載入，
+     所以這裡的 .container 規則不會影響其他頁面）*/
+
+/* .container 預設沒給寬度，會縮成內容寬度，時間軸會擠成細長一條 */
+.container {
+    width: 100%;
+}
 
 .timeline-container {
     position: relative;
-    padding-left: 40px;
+    padding-left: 46px;
     /* 為時間線和點提供空間 */
     margin: 20px 0;
     /* timeline.css 的 ::before 佔用了玻璃的折射邊，這裡用 inset 描邊補回來 */
@@ -10,41 +17,133 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.09);
 }
 
+/* ── 軌道：整條淡淡的底線 ───────────────────────── */
 .timeline-container::before {
     content: '';
     position: absolute;
-    left: 10px;
-    top: 0;
-    bottom: 0;
+    left: 14px;
+    top: 8px;
+    bottom: 8px;
     width: 2px;
     border-radius: 2px;
-    background: linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.28),
-            rgba(0, 225, 255, 0.35) 35%,
-            rgba(150, 130, 255, 0.22));
+    background: rgba(255, 255, 255, 0.10);
     z-index: 1;
 }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
+/* ── 進度條：隨捲動由上往下長出來 ───────────────── */
+.timeline-progress {
+    position: absolute;
+    left: 14px;
+    top: 8px;
+    width: 2px;
+    height: 0;
+    border-radius: 2px;
+    z-index: 2;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.55),
+            rgba(0, 225, 255, 0.85) 40%,
+            rgba(150, 130, 255, 0.75));
+    box-shadow: 0 0 12px rgba(0, 225, 255, 0.55);
+    transition: height .18s linear;
 }
 
+/* 進度條前端的光點 */
+.timeline-progress::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -3px;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 50%;
+    background: #eafcff;
+    box-shadow: 0 0 14px 3px rgba(0, 225, 255, 0.85);
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+.timeline-container.is-scrolling .timeline-progress::after {
+    opacity: 1;
+}
+
+/* ── 項目：進場動畫 ─────────────────────────────── */
+.timeline-item {
+    position: relative;
+    margin-bottom: 34px;
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(6px);
+    transition:
+        opacity .7s cubic-bezier(.22, 1, .36, 1),
+        transform .7s cubic-bezier(.22, 1, .36, 1),
+        filter .7s cubic-bezier(.22, 1, .36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+}
+
+.timeline-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.timeline-item:last-child {
+    margin-bottom: 8px;
+}
+
+/* ── 圓點 ───────────────────────────────────────── */
 .timeline-dot {
     position: absolute;
-    left: -31px;
-    /* (40px padding - 10px dot position) + 1px border */
-    top: 5px;
+    left: -39px;
+    top: 6px;
     height: 16px;
     width: 16px;
     background: radial-gradient(circle at 32% 28%, #ffffff, var(--link-color) 55%, #0b7f96);
     border: 2px solid rgba(5, 6, 10, 0.9);
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(0, 225, 255, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-    z-index: 1;
+    z-index: 3;
+    transform: scale(0);
+    transition: transform .55s cubic-bezier(.34, 1.56, .64, 1),
+        box-shadow .35s ease;
+    transition-delay: calc(var(--reveal-delay, 0s) + .12s), 0s;
 }
 
+.timeline-item.is-visible .timeline-dot {
+    transform: scale(1);
+}
+
+/* 圓點外圈：進場時擴散一次 */
+.timeline-dot::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 225, 255, 0.5);
+    opacity: 0;
+}
+
+.timeline-item.is-visible .timeline-dot::after {
+    animation: dot-ripple 1.1s ease-out forwards;
+    animation-delay: calc(var(--reveal-delay, 0s) + .18s);
+}
+
+@keyframes dot-ripple {
+    0% {
+        opacity: .9;
+        transform: scale(.5);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.9);
+    }
+}
+
+/* ── 內容卡片 ───────────────────────────────────── */
 .timeline-content {
+    position: relative;
+    overflow: hidden;
     background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.06), rgba(90, 150, 220, 0.03));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
@@ -53,11 +152,50 @@
     transition: box-shadow .45s cubic-bezier(.22, 1, .36, 1), transform .45s cubic-bezier(.22, 1, .36, 1);
 }
 
+/* 卡片上的一道光，進場時掃過 */
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 45%;
+    background: linear-gradient(100deg,
+            transparent,
+            rgba(0, 225, 255, 0.10),
+            transparent);
+    transform: skewX(-18deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.timeline-item.is-visible .timeline-content::before {
+    animation: card-sheen 1.5s cubic-bezier(.22, 1, .36, 1) forwards;
+    animation-delay: calc(var(--reveal-delay, 0s) + .2s);
+}
+
+@keyframes card-sheen {
+    0% {
+        left: -60%;
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0;
+    }
+}
+
 .timeline-date {
     font-size: 0.9rem;
     color: var(--secondary-text-color);
     margin-bottom: 10px;
     display: block;
+    letter-spacing: .06em;
 }
 
 .timeline-title {
@@ -72,9 +210,36 @@
     line-height: 1.6;
     margin: 0;
 }
+
 .timeline-item:hover .timeline-content {
     transform: translateX(4px);
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45),
         0 0 18px rgba(0, 225, 255, 0.12),
         inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.timeline-item:hover .timeline-dot {
+    box-shadow: 0 0 18px rgba(0, 225, 255, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* ── 尊重「減少動態效果」的系統設定 ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    .timeline-item,
+    .timeline-dot,
+    .timeline-progress {
+        transition: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .timeline-item .timeline-dot {
+        transform: scale(1) !important;
+    }
+
+    .timeline-content::before {
+        display: none;
+    }
 }

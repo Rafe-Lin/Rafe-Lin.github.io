@@ -81,6 +81,11 @@ function loadTimeline() {
             if (!timelineContainer) return;
             timelineContainer.innerHTML = ''; // Clear previous content
 
+            // 隨捲動長出來的進度線
+            const progress = document.createElement('div');
+            progress.className = 'timeline-progress';
+            timelineContainer.appendChild(progress);
+
             data.forEach((event, index) => {
                 const timelineItem = document.createElement('div');
                 timelineItem.className = 'timeline-item';
@@ -112,8 +117,78 @@ function loadTimeline() {
 
                 timelineContainer.appendChild(timelineItem);
             });
+
+            initTimelineReveal(timelineContainer, progress);
         })
         .catch(error => console.error('Error fetching timeline data:', error));
+}
+
+// 讓時間軸隨著使用者捲動逐項展開
+function initTimelineReveal(container, progress) {
+    const items = Array.from(container.querySelectorAll('.timeline-item'));
+    if (!items.length) return;
+
+    // 使用者若在系統設定關閉動效，就直接全部顯示
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        items.forEach(el => el.classList.add('is-visible'));
+        progress.style.height = '100%';
+        return;
+    }
+
+    const revealAll = () => items.forEach(el => el.classList.add('is-visible'));
+
+    // 一、逐項淡入：同一畫面內出現的項目依序延遲，做出接力感
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries
+                .filter(e => e.isIntersecting)
+                .sort((a, b) => items.indexOf(a.target) - items.indexOf(b.target))
+                .forEach((entry, i) => {
+                    entry.target.style.setProperty('--reveal-delay', (i * 0.11) + 's');
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                });
+        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+        items.forEach(el => observer.observe(el));
+
+        // 保險：項目的初始狀態是 opacity:0，萬一 observer 沒回呼
+        // （某些瀏覽器、擴充套件或分頁未實際繪製時會發生），
+        // 內容就會永遠看不見。1.2 秒後若一項都沒亮，直接全部顯示。
+        setTimeout(() => {
+            if (!container.querySelector('.timeline-item.is-visible')) revealAll();
+        }, 1200);
+    } else {
+        revealAll();
+    }
+
+    // 二、進度線：以「視窗中線」在時間軸上的位置決定長度
+    let scrollTimer = null;
+    const updateProgress = () => {
+        const rect = container.getBoundingClientRect();
+        const total = rect.height - 16;          // 扣掉 CSS 的 top/bottom 各 8px
+        const mid = window.innerHeight * 0.55;   // 視窗偏中間一點的判定線
+        const filled = Math.max(0, Math.min(total, mid - rect.top - 8));
+        progress.style.height = filled + 'px';
+
+        container.classList.add('is-scrolling');
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => container.classList.remove('is-scrolling'), 700);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            updateProgress();
+            ticking = false;
+        });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    updateProgress();
 }
 
 function loadCss(href) {

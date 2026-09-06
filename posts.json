@@ -1,4 +1,22 @@
-[    
+[
+    {
+        "title": "旺宏科學獎決賽心得",
+        "link": "/?page=2026-旺宏科學獎",
+        "date": "2026-9-5",
+        "description": "結論：不夠聚焦。練了超多遍報告，結果最後才發現報告不是重點，重點是問答。",
+        "image": "posts/2026-旺宏科學獎/合照.png",
+        "keywords": ["旺宏科學獎", "科展", "RAG", "心得", "反思"]
+
+    },
+    {
+        "title": "HITCON 2026 心得",
+        "link": "/?page=2026-hitcon",
+        "date": "2026-8-24",
+        "description": "目前對我來說有點高難度，但還是開了眼界。",
+        "image": "posts/2026-hitcon/開幕_超多人的.jpg",
+        "keywords": ["HITCON", "資安", "心得", "研討會"]
+
+    },
     {
         "title": "Beautify your Terminal - WSL2",
         "link": "/?page=Beautify your Terminal - WSL2",  

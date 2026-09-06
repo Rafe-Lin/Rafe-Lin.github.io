@@ -1,0 +1,16 @@
+# 壓縮前的原始照片備份（約 26 MB，不需要進版控）
+posts/_original/
+
+# 本機預覽設定
+.claude/
+
+# 作業系統 / 編輯器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
