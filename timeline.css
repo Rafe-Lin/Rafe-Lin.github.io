@@ -243,3 +243,22 @@
         display: none;
     }
 }
+
+/* ── 觸控裝置：時間軸卡片的 hover 效果改綁 :active ───────────────── */
+@media (hover: none) {
+
+    .timeline-item {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .timeline-item:active .timeline-content {
+        transform: translateX(4px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45),
+            0 0 18px rgba(0, 225, 255, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+
+    .timeline-item:active .timeline-dot {
+        box-shadow: 0 0 18px rgba(0, 225, 255, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+}

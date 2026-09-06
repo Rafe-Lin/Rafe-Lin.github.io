@@ -1,4 +1,4 @@
-// particles-bg.js - 深空星場 + 液態玻璃透鏡（滑鼠折射 / 捲動視差）
+// particles-bg.js - 深空星場 + 流星（滑鼠 / 觸控 / 陀螺儀視差）
 (function () {
     'use strict';
 
@@ -15,12 +15,14 @@
 
     const ctx = canvas.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // 手機 / 平板：沒有滑鼠可以 hover，互動要靠觸控與陀螺儀
+    const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
     let width = 0, height = 0, dpr = 1;
     let stars = [];
     let dust = null;              // 離螢幕的深空塵埃 / 星雲
-    let shootingStars = [];
-    let nextShootingStar = 0;
+    let meteors = [];
+    let nextMeteor = 0;
 
     // 指標與視差
     let pointerX = -9999, pointerY = -9999;
@@ -39,18 +41,25 @@
         layers: 5,
         parallaxMouse: 30,
         parallaxScroll: 0.24,
-        lensRadius: 190,          // 液態玻璃透鏡半徑
-        lensRefraction: 0.34,     // 折射位移強度
-        lensGain: 1.1,            // 透鏡內的增亮
+        // 游標附近的折射：只有極輕微的放大與增亮，刻意不畫任何邊界，
+        // 才不會在滑鼠外面出現一圈看得見的圓
+        lensRadius: 230,
+        lensRefraction: 0.15,
+        lensGain: 1.05,
+        meteorMinGap: 4200,       // 兩顆流星之間的最短間隔（毫秒）
+        meteorMaxGap: 11000,
     };
 
-    // 冷色系恆星：白 / 冰藍 / 主題青 / 淡紫，維持科技感
+    // 恆星光譜：真實夜空以藍白 / 白為主，夾雜少量橙紅的巨星。
+    // 這裡保留冷色調的科技感，但補上暖色，分佈才不會假。
     const STAR_COLORS = [
-        { c: [255, 255, 255], w: 34 },
-        { c: [198, 224, 255], w: 26 },
-        { c: [150, 238, 250], w: 22 },
-        { c: [186, 170, 255], w: 12 },
-        { c: [120, 255, 226], w: 6 },
+        { c: [255, 255, 255], w: 30 },   // A/F 白
+        { c: [198, 224, 255], w: 24 },   // B 藍白
+        { c: [150, 238, 250], w: 16 },   // 主題青
+        { c: [186, 170, 255], w: 10 },   // O 藍紫
+        { c: [255, 238, 205], w: 10 },   // G 黃白（太陽色）
+        { c: [255, 205, 150], w: 6 },    // K 橙
+        { c: [255, 176, 150], w: 4 },    // M 紅巨星
     ];
     const COLOR_TOTAL = STAR_COLORS.reduce((s, x) => s + x.w, 0);
 
@@ -65,6 +74,8 @@
 
     // 預先算好星點貼圖，避免每禎重建漸層
     let sprites = [];
+    let spikeSprites = [];
+
     function buildSprites() {
         sprites = STAR_COLORS.map(({ c }) => {
             const s = 64;
@@ -80,6 +91,28 @@
             grad.addColorStop(1, 'rgba(' + rgb + ',0)');
             g.fillStyle = grad;
             g.fillRect(0, 0, s, s);
+            return cv;
+        });
+
+        // 繞射芒：真實照片裡最亮的幾顆星會拉出十字光芒（望遠鏡副鏡支架造成）。
+        // 只有這個細節能讓「亮星」和「大一點的光點」在視覺上區分開來。
+        spikeSprites = STAR_COLORS.map(({ c }) => {
+            const s = 128, h = s / 2, t = 2.4;
+            const cv = document.createElement('canvas');
+            cv.width = cv.height = s;
+            const g = cv.getContext('2d');
+            const rgb = c[0] + ',' + c[1] + ',' + c[2];
+            [[1, 0], [0, 1]].forEach(([dx, dy]) => {
+                const grad = g.createLinearGradient(
+                    h - h * dx, h - h * dy, h + h * dx, h + h * dy);
+                grad.addColorStop(0.00, 'rgba(' + rgb + ',0)');
+                grad.addColorStop(0.40, 'rgba(' + rgb + ',0.22)');
+                grad.addColorStop(0.50, 'rgba(255,255,255,0.85)');
+                grad.addColorStop(0.60, 'rgba(' + rgb + ',0.22)');
+                grad.addColorStop(1.00, 'rgba(' + rgb + ',0)');
+                g.fillStyle = grad;
+                g.fillRect(dx ? 0 : h - t / 2, dy ? 0 : h - t / 2, dx ? s : t, dy ? s : t);
+            });
             return cv;
         });
     }
@@ -112,11 +145,13 @@
 
             // 冪次分佈的星等：多數細小、少數明亮
             const mag = Math.pow(Math.random(), 3);
+            this.mag = mag;
             this.size = 0.34 + mag * 1.5;
             this.baseAlpha = (0.22 + mag * 0.72) * (0.4 + this.depth * 0.6);
             this.colorIndex = pickColor();
+            this.spike = mag > 0.88;   // 只有最亮的那幾顆有繞射芒
 
-            // 大氣閃爍：兩個頻率疊加
+            // 大氣閃爍：兩個頻率疊加。越暗的星閃得越厲害，跟實際觀星一致
             this.tw1 = Math.random() * Math.PI * 2;
             this.tw2 = Math.random() * Math.PI * 2;
             this.twSpeed1 = 0.006 + Math.random() * 0.02;
@@ -149,6 +184,14 @@
         band.addColorStop(1, 'rgba(70,120,180,0)');
         g.fillStyle = band;
         g.fillRect(-w, -h * 0.3, w * 2, h * 0.6);
+
+        // 暗星雲：銀河中央那條把星光擋住的塵埃帶，少了它會太「乾淨」
+        const rift = g.createLinearGradient(0, -h * 0.06, 0, h * 0.07);
+        rift.addColorStop(0, 'rgba(2,3,6,0)');
+        rift.addColorStop(0.5, 'rgba(2,3,6,0.55)');
+        rift.addColorStop(1, 'rgba(2,3,6,0)');
+        g.fillStyle = rift;
+        g.fillRect(-w, -h * 0.06, w * 2, h * 0.13);
         g.restore();
 
         // 幾團冷色星雲（青 / 靛 / 紫），亮度壓到幾乎只是暗示
@@ -157,6 +200,7 @@
             { x: 0.80, y: 0.16, r: 0.34, c: '110,90,230', a: 0.030 },
             { x: 0.66, y: 0.78, r: 0.48, c: '0,150,205', a: 0.030 },
             { x: 0.10, y: 0.86, r: 0.30, c: '80,70,190', a: 0.024 },
+            { x: 0.44, y: 0.52, r: 0.26, c: '210,120,140', a: 0.018 },  // 一點點暖色的發射星雲
         ];
         clouds.forEach(cl => {
             const cx = cl.x * w, cy = cl.y * h, r = cl.r * Math.min(w, h);
@@ -186,50 +230,172 @@
         g.globalCompositeOperation = 'source-over';
     }
 
-    class ShootingStar {
-        constructor() {
-            this.x = Math.random() * width * 1.1 - width * 0.05;
-            this.y = -20 - Math.random() * height * 0.2;
-            const angle = 0.4 + Math.random() * 0.45;
-            const speed = 8 + Math.random() * 7;
+    // ── 流星 ─────────────────────────────────────────────────────────
+    // 真實流星的幾個特徵，這裡都做出來：
+    //  1. 同一時段的流星大致從同一個「輻射點」射出
+    //  2. 亮度不是對稱的，是快速衝亮、然後拖著慢慢熄掉
+    //  3. 燒到一半可能爆閃一下（fireball / 火流星）
+    //  4. 熄滅之後餘燼（train）還會留在天上一下子才消失
+    //  5. 顏色由燒掉的金屬決定：鎂偏綠、鈉偏橙、鈣偏紫
+    const METEOR_COLORS = [
+        { core: '255,255,255', tail: '155,225,255', w: 34 },   // 一般
+        { core: '236,255,242', tail: '120,255,190', w: 22 },   // 鎂：綠
+        { core: '255,246,214', tail: '255,186,105', w: 18 },   // 鈉：橙黃
+        { core: '242,236,255', tail: '175,150,255', w: 14 },   // 鈣：紫
+        { core: '255,255,255', tail: '150,200,255', w: 12 },   // 冷白
+    ];
+    const METEOR_TOTAL = METEOR_COLORS.reduce((s, x) => s + x.w, 0);
+
+    function pickMeteorColor() {
+        let r = Math.random() * METEOR_TOTAL;
+        for (let i = 0; i < METEOR_COLORS.length; i++) {
+            r -= METEOR_COLORS[i].w;
+            if (r <= 0) return METEOR_COLORS[i];
+        }
+        return METEOR_COLORS[0];
+    }
+
+    // 輻射點緩慢漂移，流星才不會每次都從一模一樣的方向來
+    let radiantX = 0, radiantY = 0;
+    function moveRadiant() {
+        radiantX = width * (-0.55 + Math.random() * 0.45);
+        radiantY = height * (-0.65 + Math.random() * 0.35);
+    }
+
+    class Meteor {
+        constructor(fromX, fromY) {
+            // 六分之一是火流星：又慢又亮又長
+            const fireball = Math.random() < 0.17;
+
+            if (fromX === undefined) {
+                this.x = Math.random() * width * 1.3 - width * 0.2;
+                this.y = Math.random() * height * 0.5 - height * 0.18;
+            } else {
+                this.x = fromX;
+                this.y = fromY;
+            }
+
+            const angle = Math.atan2(this.y - radiantY, this.x - radiantX)
+                + (Math.random() - 0.5) * 0.22;   // 輻射點附近的隨機散射
+            const speed = fireball
+                ? 4.5 + Math.random() * 3
+                : 10 + Math.random() * 11;
             this.vx = Math.cos(angle) * speed;
             this.vy = Math.sin(angle) * speed;
+
             this.life = 0;
-            this.maxLife = 50 + Math.random() * 40;
-            this.len = 70 + Math.random() * 120;
+            this.maxLife = (fireball ? 95 : 34) + Math.random() * (fireball ? 55 : 40);
+            this.brightness = fireball ? 1 : 0.34 + Math.random() * 0.5;
+            this.w = fireball ? 2.6 : 1.0 + Math.random() * 0.7;
+            this.trailMax = Math.round((fireball ? 46 : 22) + Math.random() * 18);
+            this.c = pickMeteorColor();
+
+            // 爆閃：火流星幾乎一定會閃，普通流星偶爾
+            this.flareAt = (fireball || Math.random() < 0.28)
+                ? 0.35 + Math.random() * 0.4 : -1;
+            this.flarePower = fireball ? 0.9 : 0.45;
+
+            this.trail = [this.x, this.y];
+            this.train = 1;                                   // 餘燼
+            this.trainLife = fireball ? 34 : 16;
         }
-        update() { this.x += this.vx; this.y += this.vy; this.life++; }
-        get dead() { return this.life > this.maxLife || this.x > width + 200 || this.y > height + 200; }
+
+        get alpha() {
+            const p = Math.min(1, this.life / this.maxLife);
+            // 前段衝亮、後段慢慢熄 —— 不是對稱的正弦
+            let a = Math.pow(Math.sin(Math.PI * Math.pow(p, 0.62)), 1.25);
+            if (this.flareAt > 0 && p > this.flareAt) {
+                const f = Math.max(0, 1 - (p - this.flareAt) / 0.16);
+                a += f * f * this.flarePower;
+            }
+            return a * this.brightness;
+        }
+
+        update() {
+            if (this.life <= this.maxLife) {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= 0.9975;      // 進入大氣後略微減速
+                this.vy *= 0.9975;
+                this.trail.push(this.x, this.y);
+                if (this.trail.length > this.trailMax * 2) this.trail.splice(0, 2);
+            } else {
+                this.train -= 1 / this.trainLife;
+            }
+            this.life++;
+        }
+
+        get dead() {
+            return this.train <= 0
+                || this.x > width + 400 || this.y > height + 400
+                || this.x < -400 || this.y < -400;
+        }
+
         draw() {
-            const p = this.life / this.maxLife;
-            const alpha = Math.sin(Math.PI * p) * 0.7;
-            if (alpha <= 0) return;
-            const m = Math.hypot(this.vx, this.vy) || 1;
-            const tx = this.x - (this.vx / m) * this.len;
-            const ty = this.y - (this.vy / m) * this.len;
-            const g = ctx.createLinearGradient(this.x, this.y, tx, ty);
-            g.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
-            g.addColorStop(0.2, 'rgba(150,235,255,' + alpha * 0.45 + ')');
-            g.addColorStop(1, 'rgba(120,180,255,0)');
-            ctx.strokeStyle = g;
-            ctx.lineWidth = 1.2;
+            const n = this.trail.length / 2;
+            if (n < 2) return;
+            const head = this.alpha * this.train;
+            if (head <= 0.012) return;
+
             ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(tx, ty);
-            ctx.stroke();
+            for (let i = 1; i < n; i++) {
+                const q = i / (n - 1);                         // 0 = 尾端，1 = 頭
+                const a = head * Math.pow(q, 1.55);
+                if (a < 0.012) continue;
+                ctx.strokeStyle = 'rgba('
+                    + (q > 0.8 ? this.c.core : this.c.tail) + ','
+                    + Math.min(1, a) + ')';
+                ctx.lineWidth = this.w * (0.2 + q * 0.95);
+                ctx.beginPath();
+                ctx.moveTo(this.trail[(i - 1) * 2], this.trail[(i - 1) * 2 + 1]);
+                ctx.lineTo(this.trail[i * 2], this.trail[i * 2 + 1]);
+                ctx.stroke();
+            }
+
+            // 頭部的光暈：真實流星的發光體很小，只有一小點，
+            // 大部分的長度是後面拖出來的尾巴
+            if (this.life <= this.maxLife) {
+                const r = this.w * (2.2 + head * 4.2);
+                const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r);
+                g.addColorStop(0, 'rgba(255,255,255,' + Math.min(0.9, head) + ')');
+                g.addColorStop(0.22, 'rgba(' + this.c.core + ',' + Math.min(0.65, head * 0.55) + ')');
+                g.addColorStop(0.55, 'rgba(' + this.c.tail + ',' + Math.min(0.3, head * 0.22) + ')');
+                g.addColorStop(1, 'rgba(' + this.c.tail + ',0)');
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
     }
 
+    function spawnMeteor(x, y) {
+        if (meteors.length > 8) return;
+        meteors.push(new Meteor(x, y));
+    }
+
+    // 有些情況下 window.innerHeight 會回報 0（背景分頁還原、webview 初始化、
+    // 預覽面板未繪製）。這時 canvas 高度是 0、星星一顆都生不出來，而且不會再
+    // 觸發 resize 事件，畫面就永遠空著 —— 所以多留一組後備量法。
+    function viewport() {
+        return {
+            w: window.innerWidth || document.documentElement.clientWidth || 0,
+            h: window.innerHeight || document.documentElement.clientHeight || 0
+        };
+    }
+
     function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
+        const vp = viewport();
+        if (!vp.w || !vp.h) return;    // 量不到就先不動，交給 animate() 重試
+        width = vp.w;
+        height = vp.h;
         dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         buildDust();
         createStars();
+        moveRadiant();
     }
 
     function createStars() {
@@ -244,12 +410,6 @@
         const R = CONFIG.lensRadius;
         const R2 = R * R;
         const lensOn = lensPresence > 0.01;
-        // 指標移動時，透鏡沿運動方向被拉長 —— 液體的慣性
-        const speed = Math.min(1, Math.hypot(lensVX, lensVY) / 45);
-        const stretch = 1 + speed * 0.45;
-        const sqz = 1 - speed * 0.2;
-        const dirX = speed > 0.01 ? lensVX / (Math.hypot(lensVX, lensVY) || 1) : 1;
-        const dirY = speed > 0.01 ? lensVY / (Math.hypot(lensVX, lensVY) || 1) : 0;
 
         for (let i = 0; i < stars.length; i++) {
             const s = stars[i];
@@ -266,20 +426,18 @@
             let scale = 1;
 
             if (lensOn) {
-                // 把座標轉到透鏡的橢圓空間，算出折射位移
-                let dx = x - lensX, dy = y - lensY;
-                const along = dx * dirX + dy * dirY;
-                const perp = -dx * dirY + dy * dirX;
-                const ex = along / stretch, ey = perp / sqz;
-                const d2 = ex * ex + ey * ey;
+                // 游標附近的星星被輕微推開並提亮。位移與增亮都在半徑處
+                // 平滑歸零，所以看不到任何邊界 —— 只感覺得到那一塊在呼吸
+                const dx = x - lensX, dy = y - lensY;
+                const d2 = dx * dx + dy * dy;
                 if (d2 < R2) {
                     const d = Math.sqrt(d2) / R;                  // 0..1
-                    const k = (1 - d * d) * CONFIG.lensRefraction * lensPresence;
+                    const falloff = (1 - d * d) * (1 - d * d);    // 邊緣一階導數也是 0
+                    const k = falloff * CONFIG.lensRefraction * lensPresence;
                     x += dx * k;                                  // 向外推 = 放大
                     y += dy * k;
-                    const edge = Math.pow(1 - d, 0.6);
-                    alpha *= 1 + (CONFIG.lensGain - 1) * edge * lensPresence;
-                    scale = 1 + 0.5 * edge * lensPresence;
+                    alpha *= 1 + (CONFIG.lensGain - 1) * falloff * lensPresence;
+                    scale = 1 + 0.35 * falloff * lensPresence;
                 }
             }
 
@@ -300,57 +458,15 @@
             const size = s.size * scale * (0.92 + twinkle * 0.08) * 9;
             ctx.globalAlpha = alpha;
             ctx.drawImage(sprites[s.colorIndex], x - size / 2, y - size / 2, size, size);
+
+            if (s.spike) {
+                // 芒的長度跟著閃爍呼吸，像大氣擾動下的真實亮星
+                const L = size * (2.6 + twinkle * 0.6);
+                ctx.globalAlpha = alpha * 0.55;
+                ctx.drawImage(spikeSprites[s.colorIndex], x - L / 2, y - L / 2, L, L);
+            }
             ctx.globalAlpha = 1;
         }
-    }
-
-    // 透鏡本體：邊緣的高光環 + 一點色散，像一滴玻璃浮在星空上
-    function drawLens() {
-        if (lensPresence <= 0.01) return;
-        const R = CONFIG.lensRadius;
-        const speed = Math.min(1, Math.hypot(lensVX, lensVY) / 45);
-        const angle = Math.atan2(lensVY, lensVX);
-
-        ctx.save();
-        ctx.translate(lensX, lensY);
-        if (speed > 0.01) {
-            ctx.rotate(angle);
-            ctx.scale(1 + speed * 0.45, 1 - speed * 0.2);
-        }
-
-        // 內部極淡的體積感
-        const fill = ctx.createRadialGradient(0, 0, 0, 0, 0, R);
-        fill.addColorStop(0, 'rgba(120,220,255,' + 0.020 * lensPresence + ')');
-        fill.addColorStop(0.72, 'rgba(90,160,255,' + 0.012 * lensPresence + ')');
-        fill.addColorStop(1, 'rgba(140,120,255,0)');
-        ctx.fillStyle = fill;
-        ctx.beginPath();
-        ctx.arc(0, 0, R, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 邊緣高光（上緣亮、下緣暗）
-        const rim = ctx.createLinearGradient(0, -R, 0, R);
-        rim.addColorStop(0, 'rgba(210,245,255,' + 0.30 * lensPresence + ')');
-        rim.addColorStop(0.45, 'rgba(120,220,255,' + 0.10 * lensPresence + ')');
-        rim.addColorStop(1, 'rgba(150,130,255,' + 0.16 * lensPresence + ')');
-        ctx.strokeStyle = rim;
-        ctx.lineWidth = 1.1;
-        ctx.beginPath();
-        ctx.arc(0, 0, R, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // 色散：青 / 紫兩道環各偏移一點點
-        ctx.lineWidth = 0.7;
-        ctx.strokeStyle = 'rgba(0,235,255,' + 0.12 * lensPresence + ')';
-        ctx.beginPath();
-        ctx.arc(0, 0, R - 1.6, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = 'rgba(170,120,255,' + 0.10 * lensPresence + ')';
-        ctx.beginPath();
-        ctx.arc(0, 0, R + 1.6, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.restore();
     }
 
     function drawFrame() {
@@ -361,23 +477,33 @@
         }
 
         drawStars();
-        drawLens();
 
-        for (let i = shootingStars.length - 1; i >= 0; i--) {
-            shootingStars[i].update();
-            shootingStars[i].draw();
-            if (shootingStars[i].dead) shootingStars.splice(i, 1);
+        // 流星用 lighter 疊加，交錯時會自然變亮
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = meteors.length - 1; i >= 0; i--) {
+            meteors[i].update();
+            meteors[i].draw();
+            if (meteors[i].dead) meteors.splice(i, 1);
         }
+        ctx.restore();
     }
 
     let rafId = null;
     function animate(now) {
         rafId = requestAnimationFrame(animate);
 
+        // 只在「已經壞掉」的狀態下重建，正常情況一毛成本都不花
+        if (!width || !height || !stars.length) {
+            const vp = viewport();
+            if (vp.w && vp.h) resize();
+            if (!stars.length) return;
+        }
+
         offsetX += (targetOffsetX - offsetX) * 0.045;
         offsetY += (targetOffsetY - offsetY) * 0.045;
 
-        // 透鏡用較慢的緩動追上游標 —— 這是「液態」的來源
+        // 折射區用較慢的緩動追上游標 —— 這是「液態」的來源
         if (pointerX > -9000) {
             if (lensX < -9000) { lensX = pointerX; lensY = pointerY; }
             const nx = lensX + (pointerX - lensX) * 0.16;
@@ -393,9 +519,20 @@
         scrollVel *= 0.88;
         if (Math.abs(scrollVel) < 0.05) scrollVel = 0;
 
-        if (now > nextShootingStar) {
-            if (nextShootingStar !== 0) shootingStars.push(new ShootingStar());
-            nextShootingStar = now + 9000 + Math.random() * 16000;
+        if (now > nextMeteor) {
+            if (nextMeteor !== 0) {
+                spawnMeteor();
+                // 五分之一的機率是一小群，同時來兩三顆
+                if (Math.random() < 0.2) {
+                    const extra = 1 + Math.round(Math.random());
+                    for (let k = 1; k <= extra; k++) {
+                        setTimeout(spawnMeteor, 180 + Math.random() * 700);
+                    }
+                }
+                if (Math.random() < 0.3) moveRadiant();
+            }
+            nextMeteor = now + CONFIG.meteorMinGap
+                + Math.random() * (CONFIG.meteorMaxGap - CONFIG.meteorMinGap);
         }
 
         drawFrame();
@@ -409,19 +546,72 @@
         scrollVel = scrollVel * 0.5 - delta * 0.5;
     }
 
+    // ── 指標 ─────────────────────────────────────────────────────────
+    function setPointer(x, y) {
+        pointerX = x;
+        pointerY = y;
+        targetOffsetX = (width / 2 - x) / (width / 2) * CONFIG.parallaxMouse;
+        targetOffsetY = (height / 2 - y) / (height / 2) * CONFIG.parallaxMouse * 0.6;
+        // styles.css 用這兩個變數畫玻璃上的高光
+        document.documentElement.style.setProperty('--px', x + 'px');
+        document.documentElement.style.setProperty('--py', y + 'px');
+    }
+
     document.addEventListener('pointermove', (e) => {
-        pointerX = e.clientX;
-        pointerY = e.clientY;
-        targetOffsetX = (width / 2 - pointerX) / (width / 2) * CONFIG.parallaxMouse;
-        targetOffsetY = (height / 2 - pointerY) / (height / 2) * CONFIG.parallaxMouse * 0.6;
-        document.documentElement.style.setProperty('--px', pointerX + 'px');
-        document.documentElement.style.setProperty('--py', pointerY + 'px');
+        if (e.pointerType === 'touch') return;   // 觸控交給下面的 touch 事件處理
+        setPointer(e.clientX, e.clientY);
     }, { passive: true });
 
     document.addEventListener('pointerleave', () => {
         pointerX = -9999; pointerY = -9999;
         targetOffsetX = 0; targetOffsetY = 0;
     });
+
+    // ── 觸控：手機沒有 hover，互動全靠這裡 ───────────────────────────
+    let touchStart = null;
+    window.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        if (!t) return;
+        touchStart = { x: t.clientX, y: t.clientY, at: Date.now() };
+        setPointer(t.clientX, t.clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        const t = e.touches[0];
+        if (!t) return;
+        setPointer(t.clientX, t.clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+        // 輕點（沒有滑動、時間短）就從指尖射出一顆流星
+        const t = e.changedTouches && e.changedTouches[0];
+        if (t && touchStart
+            && Date.now() - touchStart.at < 320
+            && Math.hypot(t.clientX - touchStart.x, t.clientY - touchStart.y) < 12) {
+            radiantX = t.clientX - 200;
+            radiantY = t.clientY - 260;
+            spawnMeteor(t.clientX, t.clientY);
+        }
+        touchStart = null;
+        // 手指離開後折射慢慢淡掉，但高光停在原處，畫面不會突然變暗
+        pointerX = -9999; pointerY = -9999;
+    }, { passive: true });
+
+    // ── 陀螺儀：把手機拿在手上傾斜，星空跟著移動 ────────────────────
+    // iOS 13+ 需要使用者手勢後呼叫 requestPermission，沒有權限就跳過，
+    // 這時仍然有觸控與捲動視差可用。
+    if (coarsePointer && window.DeviceOrientationEvent
+        && typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+        let baseGamma = null, baseBeta = null;
+        window.addEventListener('deviceorientation', (e) => {
+            if (e.gamma == null || e.beta == null) return;
+            if (baseGamma === null) { baseGamma = e.gamma; baseBeta = e.beta; }
+            const gx = Math.max(-1, Math.min(1, (e.gamma - baseGamma) / 24));
+            const gy = Math.max(-1, Math.min(1, (e.beta - baseBeta) / 24));
+            targetOffsetX = -gx * CONFIG.parallaxMouse * 1.5;
+            targetOffsetY = -gy * CONFIG.parallaxMouse * 0.9;
+        }, { passive: true });
+    }
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -441,9 +631,19 @@
 
     buildSprites();
     resize();
+
+    // 觸控裝置一開始沒有指標位置，玻璃上的高光會整片不見。
+    // 先給一個偏上方的預設位置，看起來像有一道環境光。
+    if (coarsePointer) {
+        document.documentElement.style.setProperty('--px', (width * 0.5) + 'px');
+        document.documentElement.style.setProperty('--py', (height * 0.18) + 'px');
+    }
+
     if (reduceMotion) {
         drawFrame();
     } else {
         rafId = requestAnimationFrame(animate);
+        // 進站後很快來一顆，讓人知道這裡有流星
+        setTimeout(() => spawnMeteor(), 1800 + Math.random() * 1500);
     }
 })();

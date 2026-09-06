@@ -669,3 +669,63 @@ tbody tr:nth-child(even) {
         transform: none;
     }
 }
+
+/* ── 觸控裝置：沒有滑鼠就沒有 :hover，改用按下當下的 :active 給回饋 ──
+   （手機也要有互動感，不然所有光暈效果在手機上等於不存在）*/
+@media (hover: none) {
+
+    /* 關掉系統預設那層灰色點擊反白，換成自己的效果 */
+    a,
+    button,
+    .post-box,
+    .box,
+    .glass {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass:active,
+    .box:active,
+    .post-box:active {
+        box-shadow:
+            0 22px 55px rgba(0, 0, 0, 0.6),
+            0 0 22px rgba(0, 225, 255, 0.14),
+            var(--glass-inner);
+    }
+
+    .glass:active::before,
+    .box:active::before,
+    .post-box:active::before {
+        opacity: 1;
+    }
+
+    .post-box {
+        transition: transform .25s cubic-bezier(.22, 1, .36, 1),
+            box-shadow .25s ease;
+    }
+
+    .post-box:active {
+        transform: translateY(-3px) scale(.994);
+    }
+
+    .nav-left a:active,
+    .nav-center a:active,
+    .post-content h2 a:active {
+        text-shadow: 0 0 8px var(--link-color), 0 0 15px var(--link-color);
+    }
+
+    .nav-left a:active svg {
+        filter: drop-shadow(0 0 5px var(--link-color));
+    }
+
+    .icon-plantext .value:active {
+        text-decoration: underline;
+        color: var(--link-color);
+    }
+
+    .share-btn:active {
+        background: rgba(0, 255, 255, 0.1);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.05);
+        text-shadow: 0 0 8px var(--link-color);
+        transform: scale(.97);
+    }
+}

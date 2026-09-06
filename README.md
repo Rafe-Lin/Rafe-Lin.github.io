@@ -1,4 +1,4 @@
-# Rafe-Lin's Blog
+# y0tta's Blog
 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 

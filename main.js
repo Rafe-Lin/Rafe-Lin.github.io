@@ -162,14 +162,40 @@ function initTimelineReveal(container, progress) {
         revealAll();
     }
 
-    // 二、進度線：以「視窗中線」在時間軸上的位置決定長度
+    // 二、進度線：隨捲動由上往下長出來
+    //
+    // 兩套算法取較大者：
+    //  (a) 自然：視窗中線走到時間軸的哪裡，線就長到哪裡 —— 手感跟著捲動走。
+    //  (b) 保底：從載入時的長度線性拉到 100%。
+    // 只有 (a) 的話，項目太少 / 頁面捲不了多遠時，中線永遠走不到時間軸底部，
+    // 進度線就會卡在半路填不滿；(b) 保證「捲到底 = 滿格」。
+    // 頁面夠長時 (a) 一路領先，(b) 只在最後一刻追平，所以不影響原本的手感。
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
     let scrollTimer = null;
     const updateProgress = () => {
+        const vh = window.innerHeight;
+        // 版面還沒定案時（某些預覽環境載入初期會回報 0）量到的數字沒有意義，
+        // 照著算會誤判成「頁面不能捲動」而直接把進度線填滿
+        if (vh < 100) return;
+
         const rect = container.getBoundingClientRect();
-        const total = rect.height - 16;          // 扣掉 CSS 的 top/bottom 各 8px
-        const mid = window.innerHeight * 0.55;   // 視窗偏中間一點的判定線
-        const filled = Math.max(0, Math.min(total, mid - rect.top - 8));
-        progress.style.height = filled + 'px';
+        const scrollY = window.scrollY || window.pageYOffset || 0;
+        const total = Math.max(0, rect.height - 16);   // 扣掉 CSS 的 top/bottom 各 8px
+        const mid = vh * 0.55;                         // 視窗偏中間一點的判定線
+
+        const docH = Math.max(
+            document.documentElement.scrollHeight,
+            document.body ? document.body.scrollHeight : 0
+        );
+        const scrollable = Math.max(0, docH - vh);
+        const t = scrollable > 1 ? clamp(scrollY / scrollable, 0, 1) : 1;
+
+        const natural = clamp(mid - rect.top - 8, 0, total);
+        const start = clamp(mid - (rect.top + scrollY) - 8, 0, total);  // 捲動量為 0 時的長度
+        const stretched = start + (total - start) * t;
+
+        progress.style.height = Math.max(natural, stretched) + 'px';
 
         container.classList.add('is-scrolling');
         clearTimeout(scrollTimer);
@@ -188,7 +214,11 @@ function initTimelineReveal(container, progress) {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+
+    // 卡片高度要等字型與版面定案才準，補算幾次
     updateProgress();
+    [80, 400, 1200].forEach(ms => setTimeout(updateProgress, ms));
+    if (window.ResizeObserver) new ResizeObserver(updateProgress).observe(container);
 }
 
 function loadCss(href) {
