@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>y0tta's Blog - Shared Post</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icon2.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico?v=2" type="image/x-icon">
+    <link rel="apple-touch-icon" href="src/apple-touch-icon.png">
+    <meta name="theme-color" content="#071116">
     <script src="page-meta.js" defer></script>
 </head>
 
 <body>
     <nav>
         <div class="nav-left">
-            <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" height="25" viewBox="0 0 24 24" width="28">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                </svg>
+            <a href="/" class="brand-mark" aria-label="回到首頁">
+                <img src="src/profile-avatar.webp" alt="" width="40" height="40">
             </a>
             <a href="/" class="blog-title">y0tta's Blog</a>
         </div>
@@ -27,12 +27,12 @@
         </div>
     </nav>
     <div class="container">
-        <div class="page-main full-width">
+        <main id="main-content" tabindex="-1" class="page-main full-width">
             <div class="box blog-content" id="blog-content">
                 <div id="html-output"></div>
                 <script src="script.js"></script>
             </div>
-        </div>
+        </main>
     </div>
     <footer>
         <p>© 2025 y0tta. All rights reserved.</p>

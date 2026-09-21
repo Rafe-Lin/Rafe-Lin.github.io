@@ -1,6 +1,7 @@
 @font-face {
     font-family: 'MesloLGLDZ';
     src: url('fonts/MesloLGLDZ-Regular.ttf') format('truetype');
+    font-display: swap;
 }
 
 :root {
@@ -728,4 +729,100 @@ tbody tr:nth-child(even) {
         text-shadow: 0 0 8px var(--link-color);
         transform: scale(.97);
     }
+}
+
+/* Brand refresh: cyan light, warm gold, and calm reading surfaces. */
+:root {
+    --primary-glow-color: #62e4e8;
+    --link-color: #72e1e4;
+    --primary-text-color: #dce7eb;
+    --secondary-text-color: #9aaeb7;
+    --code-text-color: #f1d47e;
+    --glass-radius: 22px;
+    --glass-blur: blur(18px) saturate(125%);
+    --glass-tint: rgba(15, 32, 40, .86);
+    --glass-tint-2: rgba(10, 22, 30, .88);
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', sans-serif; line-height: 1.7; text-shadow: none; }
+a { text-underline-offset: 4px; }
+a:focus-visible, button:focus-visible { outline: 2px solid #f1d47e; outline-offset: 5px; border-radius: 4px; }
+nav, .container, footer { width: min(1160px, calc(100% - 64px)); max-width: 1160px; }
+nav { margin-top: 20px; padding: 16px 24px; border-radius: 18px; top: 12px; gap: 24px; background-color: rgba(7,17,22,.85); }
+.nav-left { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.brand-mark { display: flex; }
+.brand-mark img { border-radius: 12px; object-fit: cover; border: 1px solid #426067; }
+.blog-title { font-size: 20px; letter-spacing: -.5px; }
+.nav-center { position: static; transform: none; margin-left: auto; gap: 8px; align-items: center; font: 12px 'MesloLGLDZ', monospace; }
+.nav-center a { padding: 12px 10px; border-radius: 9px; }
+.nav-left a, .nav-center a { text-shadow: none; color: #c9d8dd; }
+.nav-center a:hover, .nav-center a[aria-current='page'] { background: rgba(98,228,232,.08); color: #81f1ef; text-shadow: none; }
+.nav-center a[aria-current='page'] { box-shadow: inset 0 -2px #e9cf76; }
+.nav-center .separator { color: #48606a; }
+.nav-right:empty { display: none; }
+.container { margin-top: 44px; margin-bottom: 32px; gap: 32px; align-items: flex-start; }
+.page-main { min-width: 0; width: 100%; }
+.about-me { width: 278px; padding: 28px 22px; position: sticky; top: 120px; }
+.about-me img { width: 176px; height: 176px; border-radius: 24px; border-color: rgba(238,212,126,.35); box-shadow: 0 0 32px rgba(45,198,208,.1); }
+.about-me .name { font: bold 28px 'MesloLGLDZ', monospace; margin-top: 20px; }
+.about-me .title { letter-spacing: 1px; }
+.icon-plantext { min-width: 0; }
+.icon-plantext .value { overflow-wrap: anywhere; font-size: 12px; }
+.icon-container { flex-shrink: 0; }
+.box::before, nav::before, .post-box::before, footer::before { opacity: .4; }
+.box::after, .post-box::after, footer::after { opacity: .22; }
+.blog-content { padding: 32px 38px; }
+#html-output { width: 100%; min-width: 0; }
+#html-output h1, #html-output h2, #html-output h3, #html-output h4, #html-output h5, #html-output h6 { color: #e4eef1; text-shadow: none; line-height: 1.45; }
+#html-output h1 { font-size: clamp(25px, 3vw, 34px); margin-top: 0; letter-spacing: -.7px; }
+#html-output h2 { font-size: 22px; border-bottom: 1px solid rgba(125,186,197,.16); padding-bottom: 12px; }
+#html-output p, #html-output li { line-height: 1.95; }
+#html-output a { text-shadow: none; }
+#html-output pre { white-space: pre; overflow-wrap: normal; }
+#html-output pre code { white-space: inherit; }
+#html-output table { display: block; overflow-x: auto; }
+.is-home #html-output h1 { font-size: 22px; }
+.is-home #html-output h2 { font-size: 18px; }
+.post-content { min-width: 0; }
+.post-content h2 { margin: 0; line-height: 1.4; }
+.post-content h2 a { color: #e2edef; font-size: 22px; }
+.post-content h2 a:hover { color: #82e4e1; text-shadow: none; }
+.post-content p { color: #afc0c8; }
+.post-content .post-date { color: #dec780; font-size: 12px; }
+footer { background: none; box-shadow: none; backdrop-filter: none; padding: 22px 0; font-size: 12px; border-top: 1px solid #20333d; border-radius: 0; margin-top: auto; }
+footer::before, footer::after { display: none; }
+@media (max-width: 1023px) {
+    nav { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .nav-center { margin-left: 0; }
+    .container { flex-direction: row; padding: 0; }
+    .about-me { width: 245px !important; }
+}
+@media (max-width: 760px) {
+    nav, .container, footer { width: calc(100% - 32px); }
+    nav { padding: 12px; margin-top: 12px; gap: 8px; top: 8px; }
+    .nav-left { width: 100%; justify-content: center; }
+    .nav-center { gap: 0; width: 100%; justify-content: space-around; font-size: 10px; }
+    .nav-center a { padding: 12px 5px; }
+    .container { flex-direction: column; margin-top: 26px; gap: 24px; }
+    .about-me { width: 100% !important; position: static; }
+    .about-me img { width: 132px; height: 132px; }
+    .about-me .icon-text { display: inline-flex; margin: 12px 8px 0; vertical-align: top; }
+    .blog-content { padding: 24px; }
+    .posts-list { padding: 0; }
+    .post-box { padding: 22px; gap: 18px; align-items: stretch; }
+    .post-image { height: 180px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+.icon-container svg:has(polyline) { fill: none; }
+@media (max-width: 760px) {
+    .nav-center { font: 10px 'MesloLGLDZ', monospace; flex-wrap: wrap; }
+    .nav-center a { padding: 10px 5px; }
+    .about-me { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 4px 18px; text-align: left; padding: 20px; }
+    .about-me img { width: 82px; height: 82px; grid-row: 1 / 3; border-radius: 18px; }
+    .about-me .name { margin: 6px 0 0; font-size: 24px; align-self: end; }
+    .about-me .title { margin: 0; font-size: 12px; }
+    .about-me hr { grid-column: 1 / -1; width: 100%; margin: 12px 0 4px; }
+    .about-me .icon-text { grid-column: 1 / -1; display: flex; margin: 8px 0 0; }
 }

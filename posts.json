@@ -3,9 +3,9 @@
         "title": "旺宏科學獎決賽心得",
         "link": "/?page=2026-旺宏科學獎",
         "date": "2026-9-5",
-        "description": "結論：不夠聚焦。練了超多遍報告，結果最後才發現報告不是重點，重點是問答。",
+        "description": "因為不夠聚焦被噴爆，重點是問答。",
         "image": "posts/2026-旺宏科學獎/合照.png",
-        "keywords": ["旺宏科學獎", "科展", "RAG", "心得", "反思"]
+        "keywords": ["旺宏科學獎", "科展", "RAG", "心得"]
 
     },
     {
@@ -14,7 +14,7 @@
         "date": "2026-8-24",
         "description": "目前對我來說有點高難度，但還是開了眼界。",
         "image": "posts/2026-hitcon/開幕_超多人的.jpg",
-        "keywords": ["HITCON", "資安", "心得", "研討會"]
+        "keywords": ["HITCON", "資安", "心得"]
 
     },
     {
@@ -36,21 +36,25 @@
 
      },
      {
-         "title": "Scratch 1 Hour Course",
-         "link": "/?page=2025-scratch-1-hour-course",  
-         "date": "2025-3-29", 
-         "description": "這是給有 Scratch 基礎的人的一小時課程，目標是: (1) 先做出遊戲基本設定 (2) 學生自行創造地圖 (3) 加上其他遊戲元素",
-         "image": "posts/Scratch 1 hour course/SC 2025-03-29 163306.png",
-         "keywords": ["writeup"]
-
-     },
-     {
          "title": "2025 AIS3 junior 心得",
          "link": "https://www.bing.com/videos/riverview/relatedvideo?q=rick+roll&&mid=8A80C20EEF999DE5A8268A80C20EEF999DE5A826&FORM=VAMGZC",
          "date": "2024-12-01",
          "description": "因為颱風就變線上的",
          "image": "posts/2024-csc-writeup/71D5EE11-5259-4637-B6E0-990B4E8853C9.jpg",
-         "keywords": ["blog", "ais3", "post", "writeup", "金盾獎", "CTF"]
+         "keywords": ["blog", "ais3", "post", "writeup", "CTF"]
+
+     },
+     {
+         "title": "Scratch 1 Hour Course",
+         "link": "/?page=2025-scratch-1-hour-course",  
+         "date": "好久好久以前", 
+         "description": "For my little cousin",
+         "image": "posts/Scratch 1 hour course/SC 2025-03-29 163306.png",
+         "keywords": ["writeup"]
 
      }
 ]
+
+
+
+     

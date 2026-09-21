@@ -9,6 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const aboutMeBox = document.querySelector('.about-me');
     const container = document.querySelector('.container');
     const pageMain = document.querySelector('.page-main');
+    document.body.classList.toggle('is-home', !page);
+    document.querySelectorAll('.nav-center a[href]').forEach(link => {
+        const target = new URL(link.href).searchParams.get('page');
+        if (target === page || (target === 'posts' && page && !['CV', 'timeline'].includes(page))) {
+            link.setAttribute('aria-current', 'page');
+        }
+    });
 
     // 如果 URL 參數中有 'page'，就隱藏作者介紹，並讓主內容區塊變寬
     if (page) {
@@ -62,6 +69,8 @@ function loadposts() {
                     img.src = post.image;
                     img.alt = post.title;
                     img.className = 'post-image';
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
                     postDiv.appendChild(img);
                 }
 
