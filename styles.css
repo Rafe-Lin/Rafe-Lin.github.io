@@ -386,6 +386,22 @@ nav {
     color: var(--secondary-text-color);
 }
 
+#html-output details {
+    margin: 1.5em 0;
+    padding: 1em 1.25em;
+    border: 1px solid var(--container-border-color);
+    border-radius: 8px;
+}
+
+#html-output summary {
+    cursor: pointer;
+    color: var(--link-color);
+}
+
+#html-output details > p:last-child {
+    margin-bottom: 0;
+}
+
 #html-output hr {
     border: none;
     height: 1px;

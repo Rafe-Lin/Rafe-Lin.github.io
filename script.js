@@ -71,7 +71,10 @@ function markdownToHtml(markdown) {
         checkboxChecked: { pattern: "^\\s*\\- \\\[x\\\] (.*)$", flags: "gm", replacement: "<ul class=\"checkbox\"><li><input type=\"radio\" class=\"checkbox-on\" disabled checked/> $1</li></ul>" },// 處理無序列表，匹配星號、連字號和加號，允許前面有空格
         unorderedList: { pattern: "^(?!\\s*\\- \\[ \\])(?!\\s*\\- \\[x\\])\\s*[\\*\\-\\+] (.*)$", flags: "gm", replacement: "<ul><li>$1</li></ul>" },
         orderedList: { pattern: "^\\s*(\\d+)\\. (.*)$", flags: "gm", replacement: "<ol start=\"$1\"><li>$2</li></ol>" },
-        blockquote: { pattern: "^> (.*)$", flags: "gm", replacement: "<blockquote>$1</blockquote>" },
+        blockquote: {
+            pattern: "^> [^\\r\\n]*(?:\\r?\\n> [^\\r\\n]*)*", flags: "gm",
+            replacement: match => '<blockquote>' + match.split(/\r?\n/).map(line => line.slice(2)).join('<br>') + '</blockquote>'
+        },
         // 處理兩個或更多換行符號
         paragraphBreak: { pattern: "\n{2,}", flags: "gm", replacement: "</p><p>" },
         // 處理行尾有兩個或更多空格的換行符號
@@ -111,7 +114,7 @@ function markdownToHtml(markdown) {
                 result += '</p>';
                 inParagraph = false;
             }
-        } else if (!line.match(/^(<h[1-6]>|<hr>|<blockquote>|<pre>|<ul>|<ol>|<li>|<table>|<\/table>|<tr>|<\/tr>|<th>|<\/th>|<td>|<\/td>)/)) {
+        } else if (!line.match(/^(<h[1-6]>|<hr>|<blockquote>|<pre>|<ul>|<ol>|<li>|<table>|<\/table>|<tr>|<\/tr>|<th>|<\/th>|<td>|<\/td>|<\/?details\b|<summary\b)/)) {
             if (!inParagraph) {
                 result += '<p>';
                 inParagraph = true;
